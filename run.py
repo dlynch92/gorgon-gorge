@@ -1,5 +1,5 @@
 import sys
-import os
+import textwrap
 
 player_name = ""
 
@@ -9,17 +9,18 @@ def title_screen():
     or quit
     """
     print("GORGON GORGE\n")
-    print("Welcome to Gorgon Gorge, a turn-based RPG where you step into the shoes of a daring adventurer on a quest to find and confront a mythical gorgon. Your journey begins at the mouth of an ancient gorge, shrouded in dark legends and whispered tales of a creature so terrifying that its very gaze can turn flesh to stone.\n")
-    print("Driven by a desire for glory, treasure, or perhaps a deeply personal mission, you venture into the depths of Gorgon Gorge, fully aware of the dangers that lie ahead. The gorge is a place of untamed beauty and lurking peril, where every shadow hides a potential threat and every path could lead to your doom. Twisted rock formations and ancient ruins tell the story of a land steeped in magic and mystery.\n")
+    print(textwrap.fill("Welcome to Gorgon Gorge, a turn-based RPG where you step into the shoes of a daring adventurer on a quest to find and confront a mythical gorgon. Your journey begins at the mouth of an ancient gorge, shrouded in dark legends and whispered tales of a creature so terrifying that its very gaze can turn flesh to stone.", 80))
+    print("")
+    print(textwrap.fill("Driven by a desire for glory, treasure, or perhaps a deeply personal mission, you venture into the depths of Gorgon Gorge, fully aware of the dangers that lie ahead. The gorge is a place of untamed beauty and lurking peril, where every shadow hides a potential threat and every path could lead to your doom. Twisted rock formations and ancient ruins tell the story of a land steeped in magic and mystery.", 80))
+    print("")
 
     while True:
         start_or_quit = input("Commands: \nstart - Start the game \nquit - Exit the game \n\n")
 
         if start_or_quit.lower() == "start":
-            print("Starting game\n")
             break
         elif start_or_quit.lower() == "quit":
-            print("Quitting game\n")
+            print("Quitting...\n")
             sys.exit()
         else:
             print("Input not recognised.\n")
@@ -31,9 +32,9 @@ def player_name_input():
     while True:
         global player_name
         print("What is your name, adventurer?")
-        player_name = input("Please enter a name between 3 and 15 characters below: \n")
+        player_name = input("Please enter a name between 3 and 15 characters below: \n\n")
         if player_name_validation():
-            print(f"Your name is {player_name}?")
+            print(f"Your name is {player_name}?\n")
             while True:
                 yes_no = input("Commands: \nyes - Confirm name \nno - Choose another name \n\n")
                 if yes_no.lower() == "yes":
@@ -57,11 +58,11 @@ def player_name_validation():
             )
         if not player_name.replace(" ", "").isalpha():
             raise ValueError(
-                f"Please use alphabetical characters only."
+                "Please use alphabetical characters only."
         )
         if player_name.isspace():
             raise ValueError(
-                f"Please enter a name."
+                "Name cannot be blank."
             )
     except ValueError as e:
         print(f"Name invalid: {e}\n")
@@ -69,11 +70,42 @@ def player_name_validation():
     else:
         return True
 
+def field_screen():
+    """
+    The field screen where players can advance to the next battle, go to the shop or check their status   
+    """
+    field_description()
+
+    while True:
+        field_input = input("Commands: \nbattle - Advance to next battle \nshop - Buy items and equipment \nstatus - Display player status\n\n")
+        if field_input.lower() == "battle":
+                print("Fight starts\n")
+        elif field_input.lower() == "shop":
+            print("Shop starts\n")
+        elif field_input.lower() == "status":
+            print("Status starts")
+        else:
+            print("Input not recognised.\n")
+
+def field_description():
+    """
+    Description of the field that changes depending on how many battles the user has won
+    """
+    fights_won = 0
+
+    match fights_won:
+        case 0: 
+            print(textwrap.fill("The air is thick with enchantment, carrying the scent of blooming nightshade and the distant hum of mystical energies. Towering walls of ancient stone, etched with glowing runes, rise on either side - their surfaces shimmering with hues that shift like the colors of an opal.", 80))
+            print("")
+            print(textwrap.fill("As you advance deeper into the gorge the peaceful ambience gives way to something more sinister. Growling. The gnashing of teeth. A sense of forboding. Around the next bend, you know, something waits — something unknown and undoubtedly dangerous.", 80))
+            print("")
+
 def main():
     """
     Run all program functions   
     """
     title_screen()
     player_name_input()
+    field_screen()
 
 main()
