@@ -4,7 +4,7 @@ import random
 from time import sleep
 
 class Player:
-    def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, potions, battles_won):
+    def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, critical_threshold, potions, battles_won):
         self.name = name
         self.gold = gold
         self.max_hp = max_hp
@@ -13,6 +13,7 @@ class Player:
         self.defense = defense
         self.sword = sword
         self.shield = shield
+        self.critical_threshold = critical_threshold
         self.potions = potions
         self.battles_won = battles_won
     
@@ -35,6 +36,23 @@ class Player:
             sleep(0.5)
             #monster attacks
 
+    def attack_command(self, monster):
+        print(f"You swing your sword at the {monster.name}.")
+        random_number = random.randrange(1,21)
+        damage = 0
+        sleep(1)
+        if random_number == 1:
+            print(f"The {monster.name} dodges the attack.")
+        if random_number >= player.critical_threshold:
+            print(f"You rend your sword through the {monster.name}'s flesh, dealing critical damage.")
+            critical = True
+            calculate_damage_to_monster(player, monster, critical)
+        else:
+            print(f"Your attack hits!")
+            critical = False
+            calculate_damage_to_monster(player, monster, critical)
+            
+
 class Monster:
     def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
         self.name = name
@@ -44,9 +62,11 @@ class Monster:
         self.attack = attack
         self.defense = defense
         self.nature = nature
-        
+    
+    def attack_command(self, player):
+        print(f"monster chomp {player.name}")
 
-player = Player("", 5, 10, 10, 3, 3, "Short Sword", "Leather Shield", 1, 0)
+player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
 
 def title_screen():
     """
@@ -152,14 +172,15 @@ def battle_screen():
     """
     Takes players commands during a battle and executes the relevant player object function
     """
-    
+
     monster = initialise_battle()
     print(f"A {monster.name} appears. It looks {monster.nature}.\n")
        
     while True:
         battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
         if battle_input.lower() == "attack":
-            print("Swing")      
+            player.attack_command(monster)
+            monster.attack_command(player)
         elif battle_input.lower() == "defend":
             print("Shield")
         elif battle_input.lower() == "potion":
@@ -192,7 +213,22 @@ def initialise_battle():
                 case 4:
                     monster = Monster("Goblin", 5, 9, 13, 5, 3, "timid")
                     return monster   
-            
+
+def calculate_damage_to_monster(player, monster, critical):
+    damage = 0
+    if critical == True:
+        damage = player.attack * 2 - monster.defense
+    else:
+        damage_variance_determiner = random.randrange(1,11)
+        damage_variance = 0
+        if damage_variance_determiner <= 3:
+            damage_variance = 2
+        elif damage_variance_determiner >= 7:
+            damage_variance = 1                
+        damage = player.attack - monster.defense + damage_variance
+    monster.current_hp = monster.current_hp - damage
+    print(f"You deal {damage} points of damage.")    
+
 def main():
     """
     Run all program functions   
