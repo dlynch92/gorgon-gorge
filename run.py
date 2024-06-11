@@ -1,6 +1,7 @@
 import sys
 import textwrap
 import random
+from time import sleep
 
 class Player:
     def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, potions, battles_won):
@@ -19,6 +20,20 @@ class Player:
         print(f"The Adventurer {player.name}:")
         print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense} | Gold: {player.gold}")
         print(f"Sword: {player.sword} | Shield: {player.shield} | Potions: {player.potions}\n")
+
+    def flee(self, monster):
+        print(f"You turn and attempt to flee from the {monster.nature} {monster.name}.")
+        sleep(1)
+        random_number = random.randrange(1,3)
+        if random_number == 1:
+            print("And succeed!\n")
+            sleep(0.5)
+            flee = True
+            field_screen(flee)
+        else:
+            print("And fail!")
+            sleep(0.5)
+            #monster attacks
 
 class Monster:
     def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
@@ -102,11 +117,13 @@ def player_name_validation(player_name):
     else:
         return True
 
-def field_screen():
+def field_screen(flee):
     """
-    The field screen where players can advance to the next battle, go to the shop or check their status   
+    The field screen where players can advance to the next battle, go to the shop or check their status. Only calls narrative field
+    description at start of game or after winning a battle - skips if they flee.   
     """
-    field_description()
+    if not flee:
+       field_description()
 
     while True:
         field_input = input("Commands: \nbattle - Advance to next battle \nshop - Buy items and equipment \nstatus - Display player status\n\n")
@@ -133,13 +150,13 @@ def field_description():
 
 def battle_screen():
     """
-    Takes players commands during a battle 
+    Takes players commands during a battle and executes the relevant player object function
     """
-
+    
     monster = initialise_battle()
-    print(f"A {monster.name} appears. It looks {monster.nature}.")
+    print(f"A {monster.name} appears. It looks {monster.nature}.\n")
        
-    while True
+    while True:
         battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
         if battle_input.lower() == "attack":
             print("Swing")      
@@ -151,7 +168,7 @@ def battle_screen():
             player.status()
             print(f"The {monster.name} awaits your input.")
         elif battle_input.lower() == "flee":
-            print("RUN")
+            player.flee(monster)
         else:
             print("Input not recognised.\n")
 
@@ -182,6 +199,7 @@ def main():
     """
     title_screen()
     player_name_input()
-    field_screen()
+    flee = False
+    field_screen(flee)
 
 main()
