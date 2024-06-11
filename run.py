@@ -1,7 +1,19 @@
 import sys
 import textwrap
 
-player_name = ""
+class Player:
+    def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, battles_won):
+        self.name = name
+        self.gold = gold
+        self.max_hp = max_hp
+        self.current_hp = current_hp
+        self.attack = attack
+        self.defense = defense
+        self.sword = sword
+        self.shield = shield
+        self.battles_won = battles_won
+
+player = Player("", 5, 10, 10, 3, 3, "Short Sword", "Leather Shield", 0)
 
 def title_screen():
     """
@@ -29,24 +41,26 @@ def player_name_input():
     """
     Takes the player's name and runs validation function to ensure it can be accepted, then moves player on to game screen.
     """
+
     while True:
-        global player_name
         print("What is your name, adventurer?")
         player_name = input("Please enter a name between 3 and 15 characters below: \n\n")
-        if player_name_validation():
+        if player_name_validation(player_name):
             print(f"Your name is {player_name}?\n")
             while True:
                 yes_no = input("Commands: \nyes - Confirm name \nno - Choose another name \n\n")
                 if yes_no.lower() == "yes":
-                    print(f"The adventurer {player_name} steps forth...\n")
+                    player.name = player_name
+                    print(f"The adventurer {player.name} steps forth...\n")
                     break
                 elif yes_no.lower() == "no":
                     player_name_input()
                 else:
                     print("Input not recognised.\n")
             break 
+
         
-def player_name_validation():
+def player_name_validation(player_name):
     """
     Validates player name by ensuring it is between 3 and 15 characters long, contains no special characters,
     and does not consist entirely of spaces.
@@ -83,7 +97,9 @@ def field_screen():
         elif field_input.lower() == "shop":
             print("Shop starts\n")
         elif field_input.lower() == "status":
-            print("Status starts")
+            print(f"The Adventurer {player.name}:")
+            print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense} | Gold: {player.gold}")
+            print(f"Sword: {player.sword} | Shield: {player.shield}\n")
         else:
             print("Input not recognised.\n")
 
@@ -91,9 +107,8 @@ def field_description():
     """
     Description of the field that changes depending on how many battles the user has won
     """
-    fights_won = 0
 
-    match fights_won:
+    match player.battles_won:
         case 0: 
             print(textwrap.fill("The air is thick with enchantment, carrying the scent of blooming nightshade and the distant hum of mystical energies. Towering walls of ancient stone, etched with glowing runes, rise on either side - their surfaces shimmering with hues that shift like the colors of an opal.", 80))
             print("")
@@ -106,6 +121,10 @@ def main():
     """
     title_screen()
     player_name_input()
+
+    print("Player:")
+    print(player)
+
     field_screen()
 
 main()
