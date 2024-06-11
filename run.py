@@ -2,7 +2,7 @@ import sys
 import textwrap
 
 class Player:
-    def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, battles_won):
+    def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, potions, battles_won):
         self.name = name
         self.gold = gold
         self.max_hp = max_hp
@@ -11,9 +11,10 @@ class Player:
         self.defense = defense
         self.sword = sword
         self.shield = shield
+        self.potions = potions
         self.battles_won = battles_won
 
-player = Player("", 5, 10, 10, 3, 3, "Short Sword", "Leather Shield", 0)
+player = Player("", 5, 10, 10, 3, 3, "Short Sword", "Leather Shield", 1, 0)
 
 def title_screen():
     """
@@ -99,7 +100,7 @@ def field_screen():
         elif field_input.lower() == "status":
             print(f"The Adventurer {player.name}:")
             print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense} | Gold: {player.gold}")
-            print(f"Sword: {player.sword} | Shield: {player.shield}\n")
+            print(f"Sword: {player.sword} | Shield: {player.shield} | Potions: {player.potions}\n")
         else:
             print("Input not recognised.\n")
 
