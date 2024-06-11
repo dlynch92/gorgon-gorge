@@ -107,7 +107,6 @@ def field_description():
     """
     Description of the field that changes depending on how many battles the user has won
     """
-
     match player.battles_won:
         case 0: 
             print(textwrap.fill("The air is thick with enchantment, carrying the scent of blooming nightshade and the distant hum of mystical energies. Towering walls of ancient stone, etched with glowing runes, rise on either side - their surfaces shimmering with hues that shift like the colors of an opal.", 80))
@@ -121,10 +120,6 @@ def main():
     """
     title_screen()
     player_name_input()
-
-    print("Player:")
-    print(player)
-
     field_screen()
 
 main()
