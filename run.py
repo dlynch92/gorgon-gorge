@@ -1,5 +1,6 @@
 import sys
 import textwrap
+import random
 
 class Player:
     def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, potions, battles_won):
@@ -13,6 +14,17 @@ class Player:
         self.shield = shield
         self.potions = potions
         self.battles_won = battles_won
+
+class Monster:
+    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
+        self.name = name
+        self.gold = gold
+        self.max_hp = max_hp
+        self.current_hp = current_hp
+        self.attack = attack
+        self.defense = defense
+        self.nature = nature
+        
 
 player = Player("", 5, 10, 10, 3, 3, "Short Sword", "Leather Shield", 1, 0)
 
@@ -94,7 +106,8 @@ def field_screen():
     while True:
         field_input = input("Commands: \nbattle - Advance to next battle \nshop - Buy items and equipment \nstatus - Display player status\n\n")
         if field_input.lower() == "battle":
-                print("Fight starts\n")
+                print("You raise your sword.\n")
+                battle_screen()
         elif field_input.lower() == "shop":
             print("Shop starts\n")
         elif field_input.lower() == "status":
@@ -115,6 +128,36 @@ def field_description():
             print(textwrap.fill("As you advance deeper into the gorge the peaceful ambience gives way to something more sinister. Growling. The gnashing of teeth. A sense of forboding. Around the next bend, you know, something waits — something unknown and undoubtedly dangerous.", 80))
             print("")
 
+def battle_screen():
+    """
+    Takes players commands during a battle 
+    """
+
+    monster = initialise_battle()
+    print(f"A {monster.name} appears. It looks {monster.nature}.")
+    
+
+def initialise_battle():
+    """
+    Generates an enemy for the player to fight with difficulty based off the number of previous fights won
+    """
+    random_number = random.randrange(1,5)
+    match player.battles_won:
+        case 0:
+            match random_number:
+                case 1:
+                    monster = Monster("Goblin", 5, 9, 10, 4, 3, "malnurished")
+                    return monster  
+                case 2:
+                    monster = Monster("Goblin", 5, 11, 16, 6, 3, "powerful")
+                    return monster  
+                case 3:
+                    monster = Monster("Goblin", 5, 11, 13, 7, 3, "ferocious")
+                    return monster  
+                case 4:
+                    monster = Monster("Goblin", 5, 9, 13, 5, 3, "timid")
+                    return monster   
+            
 def main():
     """
     Run all program functions   
