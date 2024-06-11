@@ -14,6 +14,11 @@ class Player:
         self.shield = shield
         self.potions = potions
         self.battles_won = battles_won
+    
+    def status(self):
+        print(f"The Adventurer {player.name}:")
+        print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense} | Gold: {player.gold}")
+        print(f"Sword: {player.sword} | Shield: {player.shield} | Potions: {player.potions}\n")
 
 class Monster:
     def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
@@ -106,14 +111,12 @@ def field_screen():
     while True:
         field_input = input("Commands: \nbattle - Advance to next battle \nshop - Buy items and equipment \nstatus - Display player status\n\n")
         if field_input.lower() == "battle":
-                print("You raise your sword.\n")
-                battle_screen()
+            print("You raise your sword.\n")
+            battle_screen()
         elif field_input.lower() == "shop":
             print("Shop starts\n")
         elif field_input.lower() == "status":
-            print(f"The Adventurer {player.name}:")
-            print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense} | Gold: {player.gold}")
-            print(f"Sword: {player.sword} | Shield: {player.shield} | Potions: {player.potions}\n")
+            player.status()
         else:
             print("Input not recognised.\n")
 
@@ -135,7 +138,22 @@ def battle_screen():
 
     monster = initialise_battle()
     print(f"A {monster.name} appears. It looks {monster.nature}.")
-    
+       
+    while True
+        battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
+        if battle_input.lower() == "attack":
+            print("Swing")      
+        elif battle_input.lower() == "defend":
+            print("Shield")
+        elif battle_input.lower() == "potion":
+            print("Potion")
+        elif battle_input.lower() == "status":
+            player.status()
+            print(f"The {monster.name} awaits your input.")
+        elif battle_input.lower() == "flee":
+            print("RUN")
+        else:
+            print("Input not recognised.\n")
 
 def initialise_battle():
     """
