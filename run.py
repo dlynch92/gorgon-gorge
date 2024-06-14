@@ -39,11 +39,10 @@ class Player:
     def attack_command(self, monster):
         print(f"You swing your sword at the {monster.name}.")
         random_number = random.randrange(1,21)
-        damage = 0
         sleep(1)
         if random_number == 1:
             print(f"The {monster.name} dodges the attack.")
-        if random_number >= player.critical_threshold:
+        elif random_number >= player.critical_threshold:
             print(f"You rend your sword through the {monster.name}'s flesh, dealing critical damage.")
             critical = True
             calculate_damage_to_monster(player, monster, critical)
@@ -51,7 +50,7 @@ class Player:
             print(f"Your attack hits!")
             critical = False
             calculate_damage_to_monster(player, monster, critical)
-            
+
 
 class Monster:
     def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
@@ -65,6 +64,13 @@ class Monster:
     
     def attack_command(self, player):
         print(f"monster chomp {player.name}")
+    
+    def death(self, player):
+        player.gold = player.gold + self.gold
+        print(f"The {self.name} slumps over - defeated.")
+        print("You win!")
+        print(f"On the body of the {self.name} you find {self.gold} gold, bringing your total to {player.gold}.\n")
+        player.battles_won += 1
 
 player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
 
@@ -167,6 +173,8 @@ def field_description():
             print("")
             print(textwrap.fill("As you advance deeper into the gorge the peaceful ambience gives way to something more sinister. Growling. The gnashing of teeth. A sense of forboding. Around the next bend, you know, something waits — something unknown and undoubtedly dangerous.", 80))
             print("")
+        case 1:
+            print("You won a fight! Back to the field screen")
 
 def battle_screen():
     """
@@ -177,21 +185,26 @@ def battle_screen():
     print(f"A {monster.name} appears. It looks {monster.nature}.\n")
        
     while True:
-        battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
-        if battle_input.lower() == "attack":
-            player.attack_command(monster)
-            monster.attack_command(player)
-        elif battle_input.lower() == "defend":
-            print("Shield")
-        elif battle_input.lower() == "potion":
-            print("Potion")
-        elif battle_input.lower() == "status":
-            player.status()
-            print(f"The {monster.name} awaits your input.")
-        elif battle_input.lower() == "flee":
-            player.flee(monster)
+        if monster.current_hp > 0:
+            battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
+            if battle_input.lower() == "attack":
+                player.attack_command(monster)
+                monster.attack_command(player)
+            elif battle_input.lower() == "defend":
+                print("Shield")
+            elif battle_input.lower() == "potion":
+                print("Potion")
+            elif battle_input.lower() == "status":
+                player.status()
+                print(f"The {monster.name} awaits your input.")
+            elif battle_input.lower() == "flee":
+                player.flee(monster)
+            else:
+                print("Input not recognised.\n")
         else:
-            print("Input not recognised.\n")
+            monster.death(player)
+            flee = False
+            field_screen(flee)
 
 def initialise_battle():
     """
