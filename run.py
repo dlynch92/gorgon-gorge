@@ -18,11 +18,19 @@ class Player:
         self.battles_won = battles_won
     
     def status(self):
+        """
+        Displays the player's name, hp, attack, defense, gold and equipment whenever the status command is picked.
+        """
         print(f"The Adventurer {player.name}:")
         print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense} | Gold: {player.gold}")
         print(f"Sword: {player.sword} | Shield: {player.shield} | Potions: {player.potions}\n")
 
     def flee(self, monster):
+        """
+        When flee is picked in battle the player has a 50% chance of escaping back to the field screen. If the player
+        fails in fleeing the monster will have a free turn - if they succeed the player is taken back to the field screen
+        and flee is set to True so that the narrative text will not display again.
+        """
         print(f"You turn and attempt to flee from the {monster.nature} {monster.name}.")
         sleep(1)
         random_number = random.randrange(1,3)
@@ -37,6 +45,11 @@ class Player:
             #monster attacks
 
     def attack_command(self, monster):
+        """
+        When a player chooses to attack in battle a random number between 1 and 20 is generated - on a 1 the player will miss the 
+        attack, and any value higher than the player's critical threshold will cause a strike with extra damage. Anything else the 
+        attack will hit normally. Damage is calculated in the calculate_damage_to_monster function.
+        """
         print(f"You swing your sword at the {monster.name}.")
         random_number = random.randrange(1,21)
         sleep(1)
@@ -51,6 +64,13 @@ class Player:
             critical = False
             calculate_damage_to_monster(player, monster, critical)
 
+    def defend(self, monster):
+        """
+        Increases the player's defense rating for the remainder of the turn. The defense value of the player is updated but the
+        original value is stored in the original_defense variable within the battle scene, and player defense is set back to that
+        after the monster takes a turn.
+        """
+        print(f"You raise your shield, prepared for the {monster.name}'s next strike")
 
 class Monster:
     def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
@@ -63,10 +83,17 @@ class Monster:
         self.nature = nature
     
     def action(self, player):
+        """
+        Determines what the monster's action will be this turn, based off their nature, and calls the relevant function.
+        """
         print(f"monster chomp {player.name}")
         #todo
     
     def death(self, player):
+        """
+        When monster current_hp is reduced to 0 then the monster dies. Add the monster's gold value to the player's gold
+        total and increase players battles won counter by 1.
+        """
         player.gold = player.gold + self.gold
         print(f"The {self.name} slumps over - defeated.")
         print("You win!")
@@ -101,7 +128,6 @@ def player_name_input():
     """
     Takes the player's name and runs validation function to ensure it can be accepted, then moves player on to game screen.
     """
-
     while True:
         print("What is your name, adventurer?")
         player_name = input("Please enter a name between 3 and 15 characters below: \n\n")
@@ -182,7 +208,6 @@ def battle_screen():
     """
     Takes players commands during a battle and executes the relevant player object function
     """
-
     monster = initialise_battle()
     print(f"A {monster.name} appears. It looks {monster.nature}.\n")
        
@@ -193,10 +218,10 @@ def battle_screen():
                 player.attack_command(monster)
                 monster.action(player)
             elif battle_input.lower() == "defend":
-                current_defense = player.defense
+                original_defense = player.defense
                 player.defend(monster)
                 monster.action(player)
-                player.defense = current_defense
+                player.defense = original_defense
                 #todo
             elif battle_input.lower() == "potion":
                 print("Potion")
@@ -238,6 +263,11 @@ def initialise_battle():
                     return monster   
 
 def calculate_damage_to_monster(player, monster, critical):
+    """
+    Calculates the damage a player deals to a monster when the attack command is taken. Random number is generated to
+    determine variance so that they are not always dealing the exact same number. On a critical there is no variance but
+    player attack is doubled in the calculation.
+    """
     damage = 0
     if critical == True:
         damage = player.attack * 2 - monster.defense
