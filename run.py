@@ -1,6 +1,7 @@
 import sys
 import textwrap
 import random
+import math
 from time import sleep
 
 class Player:
@@ -66,11 +67,13 @@ class Player:
 
     def defend(self, monster):
         """
-        Increases the player's defense rating for the remainder of the turn. The defense value of the player is updated but the
-        original value is stored in the original_defense variable within the battle scene, and player defense is set back to that
-        after the monster takes a turn.
+        Increases the player's defense rating for the remainder of the turn. The defense value of the player is multiplied by 1.5 and 
+        rounded up but the original value is stored in the original_defense variable within the battle scene, and player defense is set back 
+        to that after the monster takes a turn.
         """
-        print(f"You raise your shield, prepared for the {monster.name}'s next strike")
+        print(f"You raise your shield, prepared for the {monster.name}'s next strike.")
+        self.defense = math.ceil(self.defense * 1.5)
+        print("Defense increased.")
 
 class Monster:
     def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
@@ -278,7 +281,7 @@ def calculate_damage_to_monster(player, monster, critical):
             damage_variance = 2
         elif damage_variance_determiner >= 7:
             damage_variance = 1                
-        damage = player.attack - monster.defense + damage_variance
+        damage = (player.attack - monster.defense) + damage_variance
     if damage < 0:
         damage = 0
     monster.current_hp = monster.current_hp - damage
