@@ -152,7 +152,7 @@ class Goblin(Monster):
                     print("The Goblin shuffles around trying to regain its footing after the last attack.\n")
                 else:
                     self.attack_command(player)
-                    self.turn_count += 1
+                self.turn_count += 1    
             case 2: 
                 if self.nature == "malnurished" or self.nature == "timid":
                     print(f"The Goblin looks too {self.nature} to do anything.\n")
@@ -393,10 +393,11 @@ def main():
     """
     Run all program functions.
     """
+    global player
+    player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
     title_screen()
     player_name_input()
     flee = False
     field_screen(flee)
 
-player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
 main()
