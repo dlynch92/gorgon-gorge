@@ -133,14 +133,22 @@ class Goblin(Monster):
         random_number = random.randrange(1,5)
         match random_number:
             case 1:
-                Monster.__init__(self,"Goblin", 5, 10, 10, 4, 2, "malnurished", False, False)
+                Monster.__init__(self,"Goblin", 5, 10, 10, 4, 2, "malnurished", False, False, 1)
             case 2:
-                Monster.__init__(self,"Goblin", 5, 15, 15, 5, 3, "large", False, False)
+                Monster.__init__(self,"Goblin", 5, 15, 15, 5, 3, "large", False, False, 1)
             case 3:
-                Monster.__init__(self,"Goblin", 5, 10, 10, 7, 2, "ferocious", False, False)
+                Monster.__init__(self,"Goblin", 5, 10, 10, 7, 2, "ferocious", False, False, 1)
             case 4:
-                Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False)  
+                Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False, 1)  
     
+    def introduction(self):
+        """
+        Description of the monster when it appears.
+        """
+        print(textwrap.fill("You turn the corner - a wall of foul stench permeates the air. Standing there, poised for battle, is a raggedy humanoid creature. Its sharp teeth are bared and it carries a blunt mace in one hand and a small shield in the other. You know what this is, every adventurer in the world knows what this is - A goblin. A persistant blight in the world outside of the safety of the city walls."))
+        print("")
+        print(f"It looks {self.nature}.\n")
+
     def action_determiner(self):
         """
         Determines what the monster's action will be this turn, based off their nature, either attacking, skipping a turn or storing a
@@ -182,27 +190,33 @@ class Siren(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Siren", 5, 10, 10, 4, 2, "wistful", False, False)
+                Monster.__init__(self,"Siren", 5, 10, 10, 4, 2, "wistful", False, False, 1)
             case 2:
-                Monster.__init__(self,"Siren", 5, 15, 15, 5, 3, "aloof", False, False)
+                Monster.__init__(self,"Siren", 5, 15, 15, 5, 3, "aloof", False, False, 1)
 
 class Sprite(Monster):
     def __init__(self):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "tiny", False, False)
+                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "tiny", False, False, 1)
             case 2:
-                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "swift", False, False)
+                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "swift", False, False, 1)
 
 class Troll(Monster):
     def __init__(self):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Siren", 5, 10, 10, 4, 2, "gangly", False, False)
+                Monster.__init__(self,"Troll", 5, 10, 10, 4, 2, "gangly", False, False, 1)
             case 2:
-                Monster.__init__(self,"Siren", 5, 15, 15, 5, 3, "angry", False, False)
+                Monster.__init__(self,"Troll", 5, 15, 15, 5, 3, "angry", False, False, 1)
+
+shop = {
+    "Potion": 3,
+    "Long Sword": 8,
+    "Hide Shield": 6,
+}
 
 def title_screen():
     """
@@ -285,8 +299,7 @@ def field_screen(flee):
             print("You raise your sword.\n")
             battle_screen()
         elif field_input.lower() == "shop":
-            print("Shop starts\n")
-            #todo
+            shop_screen()
         elif field_input.lower() == "status":
             player.status()
         else:
@@ -305,12 +318,28 @@ def field_description():
         case 1:
             print("You won a fight! Back to the field screen")
 
+def shop_screen():
+    """
+    Displays items the player can buy in between battles. Updates list based off amount of battles won. When an item is selected,
+    displays a description of the item and checks if the player has enough gold to buy it. Confirms if the player wants to buy it, and if 
+    yes deducts the gold total from the player and gives them the item. If it is equipment it is automatically applied to the player's stats. 
+    """
+    print("A voice rings out from the ether.")
+    print('"What are you buying?"')
+    print(shop)
+    while True:
+        shop_input = input(f"Current Gold: {player.gold}\n")
+        if shop_input in shop:
+            print(f'"Ahh, a {shop_input}? That will be {shop_input[int]} gold.')
+        else:
+            print('"We do not stock that item, ask again."')
+
 def battle_screen():
     """
     Takes players commands during a battle and executes the relevant player object function
     """
     monster = initialise_battle()
-    print(f"A {monster.name} appears. It looks {monster.nature}.\n")
+    monster.introduction()
        
     while True:
         if monster.current_hp > 0:
@@ -346,12 +375,21 @@ def battle_screen():
 
 def initialise_battle():
     """
-    Generates an enemy for the player to fight with difficulty based off the number of previous fights won
+    Generates an enemy for the player to fight with difficulty based off the number of previous fights won.
     """
+    random_number = random.randrange(1,4)
     match player.battles_won:
         case 0:
-            monster = Goblin(1)
+            monster = Goblin()
             return monster  
+        case 1:
+            if random_number == 1:
+                monster = Siren()
+            if random_number == 2:
+                monster = Sprite()
+            if random_number == 3:
+                monster = Troll()
+            return monster            
 
 def calculate_damage_to_monster(player, monster, critical):
     """
