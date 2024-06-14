@@ -111,6 +111,20 @@ class Monster:
         print(f"On the body of the {self.name} you find {self.gold} gold, bringing your total to {player.gold}.\n")
         player.battles_won += 1
 
+    def attack_command(self, player):
+        """
+        A basic monster attack - has custom description based off type of monster, and then calculates the damage dealt
+        to a player. Will display a player's remaining HP (raised to 0 if it is below 0), and if 0 then will call the
+        game_over function as the player has lost.
+        """
+        self.attack_description()
+        calculate_damage_to_player()
+        if player.current_hp <= 0:
+            player.current_hp = 0
+        print(f"Current HP: {player.current_hp}/{player.max_hp}\n")
+        if player.current_hp == 0:
+            game_over()
+
 class Goblin(Monster):
     def __init__(self, turn_count):
         self.turn_count = turn_count
@@ -127,7 +141,8 @@ class Goblin(Monster):
     
     def action_determiner(self):
         """
-        Determines what the monster's action will be this turn, based off their nature, and calls the relevant function.
+        Determines what the monster's action will be this turn, based off their nature, either attacking, skipping a turn or storing a
+        powerful strike.
         """
         match self.turn_count:
             case 1:
@@ -144,16 +159,11 @@ class Goblin(Monster):
                 self.attack_command()
                 self.turn_count = 1
 
-    def attack_command(self, player):
-        
+    def attack_description(self):
+        """
+        Description when the Goblin uses an attack.
+        """
         print("The Goblin raises its mace and swipes at you.")
-        calculate_damage_to_player()
-        if player.current_hp <= 0:
-            player.current_hp = 0
-        print(f"Current HP: {player.current_hp}/{player.max_hp}\n")
-        if player.current_hp = 0:
-            game_over()
-
 
 
 def title_screen():
@@ -352,6 +362,10 @@ def calculate_damage_to_player(player, monster):
     print(f"The {monster.name} inflicts {damage} points of damage to you.")
 
 def game_over():
+    """
+    Called when the player's HP reaches 0 - they have lost. Takes yes/no command to see if they want to play again from
+    the start. Yes will restart game, no will quit game.
+    """
     print("Your journey is over - Gorgon Gorge claims the life of another.")
     print("Perhaps the fates will be kinder to the next one.")
     print("Try again?")
@@ -367,7 +381,7 @@ def game_over():
 
 def main():
     """
-    Run all program functions   
+    Run all program functions   .
     """
     title_screen()
     player_name_input()
