@@ -90,7 +90,7 @@ class Player:
         to that after the monster takes a turn.
         """
         print(f"You raise your shield, prepared for the {monster.name}'s next strike.\n")
-        self.defense = math.ceil(self.defense * 1.5)
+        self.defense = math.ceil(self.defense * 2.5)
 
 class Monster:
     def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack, recharging):
@@ -133,13 +133,13 @@ class Goblin(Monster):
         random_number = random.randrange(1,5)
         match random_number:
             case 1:
-                Monster.__init__(self,"Goblin", 5, 9, 10, 4, 3, "malnurished", False, False)
+                Monster.__init__(self,"Goblin", 5, 10, 10, 4, 2, "malnurished", False, False)
             case 2:
-                Monster.__init__(self,"Goblin", 5, 11, 16, 6, 3, "powerful", False, False)
+                Monster.__init__(self,"Goblin", 5, 15, 15, 5, 3, "large", False, False)
             case 3:
-                Monster.__init__(self,"Goblin", 5, 11, 13, 7, 3, "ferocious", False, False)
+                Monster.__init__(self,"Goblin", 5, 10, 10, 7, 2, "ferocious", False, False)
             case 4:
-                Monster.__init__(self,"Goblin", 5, 9, 13, 5, 3, "timid", False, False)  
+                Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False)  
     
     def action_determiner(self):
         """
@@ -164,7 +164,7 @@ class Goblin(Monster):
             case 3:                
                 self.attack_command(player)
                 self.storing_attack = False
-                self.recharching = True
+                self.recharging = True
                 self.turn_count = 1
 
     def attack_description(self):
