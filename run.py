@@ -98,14 +98,7 @@ class Monster:
         self.attack = attack
         self.defense = defense
         self.nature = nature
-    
-    def action(self, player):
-        """
-        Determines what the monster's action will be this turn, based off their nature, and calls the relevant function.
-        """
-        print(f"monster chomp {player.name}")
-        #todo
-    
+
     def death(self, player):
         """
         When monster current_hp is reduced to 0 then the monster dies. Add the monster's gold value to the player's gold
@@ -116,7 +109,28 @@ class Monster:
         print("You win!")
         print(f"On the body of the {self.name} you find {self.gold} gold, bringing your total to {player.gold}.\n")
         player.battles_won += 1
+    
+    def action(self, player):
+        """
+        Determines what the monster's action will be this turn, based off their nature, and calls the relevant function.
+        """
+        print(f"monster chomp {player.name}")
+        #todo
 
+class Goblin(Monster):
+    def __init__(self, turn_count):
+        self.turn_count = turn_count
+        random_number = random.randrange(1,5)
+        match random_number:
+            case 1:
+                Monster.__init__(self,"Goblin", 5, 9, 10, 4, 3, "malnurished")
+            case 2:
+                Monster.__init__(self,"Goblin", 5, 11, 16, 6, 3, "powerful")
+            case 3:
+                Monster.__init__(self,"Goblin", 5, 11, 13, 7, 3, "ferocious")
+            case 4:
+                Monster.__init__(self,"Goblin", 5, 9, 13, 5, 3, "timid")  
+    
 player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
 
 def title_screen():
@@ -266,22 +280,10 @@ def initialise_battle():
     """
     Generates an enemy for the player to fight with difficulty based off the number of previous fights won
     """
-    random_number = random.randrange(1,5)
     match player.battles_won:
         case 0:
-            match random_number:
-                case 1:
-                    monster = Monster("Goblin", 5, 9, 10, 4, 3, "malnurished")
-                    return monster  
-                case 2:
-                    monster = Monster("Goblin", 5, 11, 16, 6, 3, "powerful")
-                    return monster  
-                case 3:
-                    monster = Monster("Goblin", 5, 11, 13, 7, 3, "ferocious")
-                    return monster  
-                case 4:
-                    monster = Monster("Goblin", 5, 9, 13, 5, 3, "timid")
-                    return monster   
+            monster = Goblin(1)
+            return monster  
 
 def calculate_damage_to_monster(player, monster, critical):
     """
