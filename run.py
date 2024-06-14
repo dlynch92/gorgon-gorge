@@ -64,6 +64,11 @@ class Player:
             print(f"Your attack hits!")
             critical = False
             calculate_damage_to_monster(player, monster, critical)
+        #check if monster dies and win battle if so
+        if monster.current_hp <= 0:
+            monster.death(player)
+            flee = False
+            field_screen(flee)
 
     def potion(self):
         """
@@ -121,7 +126,7 @@ class Monster:
         calculate_damage_to_player(player, self)
         if player.current_hp <= 0:
             player.current_hp = 0
-        print(f"Current HP: {player.current_hp}/{player.max_hp}\n")
+        print(f"Current HP: {player.current_hp}/{player.max_hp}")
         if player.current_hp == 0:
             game_over()
 
@@ -150,10 +155,10 @@ class Goblin(Monster):
                 self.turn_count += 1
             case 2: 
                 if self.nature == "malnurished" or self.nature == "timid":
-                    print(f"The Goblin looks too {self.nature} to do anything.")
+                    print(f"The Goblin looks too {self.nature} to do anything.\n")
                 else: 
                     print(f"The {self.nature} Goblin bangs its mace against its shield and lets out a bloodthirsty bellow.")
-                    print("It's readying itself for a powerful blow.")
+                    print("It's readying itself for a powerful blow.\n")
                     self.storing_attack = True 
                 self.turn_count += 1
             case 3:                
@@ -180,7 +185,7 @@ def title_screen():
     print("")
 
     while True:
-        start_or_quit = input("Commands: \nstart | quit \n\n")
+        start_or_quit = input("Commands: start | quit \n\n")
 
         if start_or_quit.lower() == "start":
             break
@@ -200,7 +205,7 @@ def player_name_input():
         if player_name_validation(player_name):
             print(f"Your name is {player_name}?\n")
             while True:
-                yes_no = input("Commands: \nyes - Confirm name \nno - Choose another name \n\n")
+                yes_no = input("Commands: yes | no \n\n")
                 if yes_no.lower() == "yes":
                     player.name = player_name
                     print(f"The adventurer {player.name} steps forth...\n")
@@ -244,7 +249,7 @@ def field_screen(flee):
        field_description()
 
     while True:
-        field_input = input("Commands: \nbattle - Advance to next battle \nshop - Buy items and equipment \nstatus - Display player status\n\n")
+        field_input = input("Commands: battle | shop | status \n\n")
         if field_input.lower() == "battle":
             print("You raise your sword.\n")
             battle_screen()
@@ -358,7 +363,7 @@ def calculate_damage_to_player(player, monster):
     if damage < 0:
         damage = 0
     player.current_hp = player.current_hp - damage
-    print(f"The {monster.name} inflicts {damage} points of damage to you.")
+    print(f"The {monster.name} inflicts {damage} points of damage to you.\n")
 
 def game_over():
     """
@@ -380,7 +385,7 @@ def game_over():
 
 def main():
     """
-    Run all program functions   .
+    Run all program functions.
     """
     title_screen()
     player_name_input()
