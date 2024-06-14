@@ -62,8 +62,9 @@ class Monster:
         self.defense = defense
         self.nature = nature
     
-    def attack_command(self, player):
+    def action(self, player):
         print(f"monster chomp {player.name}")
+        #todo
     
     def death(self, player):
         player.gold = player.gold + self.gold
@@ -158,6 +159,7 @@ def field_screen(flee):
             battle_screen()
         elif field_input.lower() == "shop":
             print("Shop starts\n")
+            #todo
         elif field_input.lower() == "status":
             player.status()
         else:
@@ -185,15 +187,20 @@ def battle_screen():
     print(f"A {monster.name} appears. It looks {monster.nature}.\n")
        
     while True:
-        if monster.current_hp > 0:
+        if monster.current_hp > 0 and player.current_hp > 0:
             battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
             if battle_input.lower() == "attack":
                 player.attack_command(monster)
-                monster.attack_command(player)
+                monster.action(player)
             elif battle_input.lower() == "defend":
-                print("Shield")
+                current_defense = player.defense
+                player.defend(monster)
+                monster.action(player)
+                player.defense = current_defense
+                #todo
             elif battle_input.lower() == "potion":
                 print("Potion")
+                #todo
             elif battle_input.lower() == "status":
                 player.status()
                 print(f"The {monster.name} awaits your input.")
@@ -201,10 +208,13 @@ def battle_screen():
                 player.flee(monster)
             else:
                 print("Input not recognised.\n")
-        else:
+        elif monster.current_hp <= 0:
             monster.death(player)
             flee = False
             field_screen(flee)
+        elif player.current_hp <= 0:
+            print("Game over.")
+            #todo
 
 def initialise_battle():
     """
