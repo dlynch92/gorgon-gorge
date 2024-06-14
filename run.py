@@ -279,6 +279,8 @@ def calculate_damage_to_monster(player, monster, critical):
         elif damage_variance_determiner >= 7:
             damage_variance = 1                
         damage = player.attack - monster.defense + damage_variance
+    if damage < 0:
+        damage = 0
     monster.current_hp = monster.current_hp - damage
     print(f"You deal {damage} points of damage.")    
 
