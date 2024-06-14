@@ -154,7 +154,7 @@ class Goblin(Monster):
         if player.current_hp = 0:
             game_over()
 
-player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
+
 
 def title_screen():
     """
@@ -168,7 +168,7 @@ def title_screen():
     print("")
 
     while True:
-        start_or_quit = input("Commands: \nstart - Start the game \nquit - Exit the game \n\n")
+        start_or_quit = input("Commands: \nstart | quit \n\n")
 
         if start_or_quit.lower() == "start":
             break
@@ -350,7 +350,21 @@ def calculate_damage_to_player(player, monster):
         damage = 0
     player.current_hp = player.current_hp - damage
     print(f"The {monster.name} inflicts {damage} points of damage to you.")
-    
+
+def game_over():
+    print("Your journey is over - Gorgon Gorge claims the life of another.")
+    print("Perhaps the fates will be kinder to the next one.")
+    print("Try again?")
+    while True:
+        yes_no = input("Commands: \yes | no \n\n")
+        if yes_no.lower() == "yes":
+            main()
+        elif yes_no.lower() == "no":
+            print("Quitting...\n")
+            sys.exit()
+        else:
+            print("Input not recognised.\n")
+
 def main():
     """
     Run all program functions   
@@ -360,4 +374,5 @@ def main():
     flee = False
     field_screen(flee)
 
+player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
 main()
