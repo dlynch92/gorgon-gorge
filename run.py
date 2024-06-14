@@ -118,7 +118,7 @@ class Monster:
         game_over function as the player has lost.
         """
         self.attack_description()
-        calculate_damage_to_player()
+        calculate_damage_to_player(player, self)
         if player.current_hp <= 0:
             player.current_hp = 0
         print(f"Current HP: {player.current_hp}/{player.max_hp}\n")
@@ -146,7 +146,8 @@ class Goblin(Monster):
         """
         match self.turn_count:
             case 1:
-                self.attack_command()
+                self.attack_command(player)
+                self.turn_count += 1
             case 2: 
                 if self.nature == "malnurished" or self.nature == "timid":
                     print(f"The Goblin looks too {self.nature} to do anything.")
@@ -154,9 +155,10 @@ class Goblin(Monster):
                     print(f"The {self.nature} Goblin bangs its mace against its shield and lets out a bloodthirsty bellow.")
                     print("It's readying itself for a powerful blow.")
                     self.storing_attack = True 
+                self.turn_count += 1
             case 3:                
                 self.storing_attack = False
-                self.attack_command()
+                self.attack_command(player)
                 self.turn_count = 1
 
     def attack_description(self):
@@ -275,20 +277,20 @@ def battle_screen():
     print(f"A {monster.name} appears. It looks {monster.nature}.\n")
        
     while True:
-        if monster.current_hp > 0 and player.current_hp > 0:
+        if monster.current_hp > 0:
             battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
             if battle_input.lower() == "attack":
                 player.attack_command(monster)
-                monster.action(player)
+                monster.action_determiner()
             elif battle_input.lower() == "defend":
                 original_defense = player.defense
                 player.defend(monster)
-                monster.action(player)
+                monster.action_determiner()
                 player.defense = original_defense
             elif battle_input.lower() == "potion":
                 if player.potions > 0:
                     player.potion()
-                    monster.action(player)
+                    monster.action_determiner()
                 else:
                     print("You reach for a potion, but have none.")
                     print(f"The {monster.name} awaits your input.")
@@ -304,9 +306,6 @@ def battle_screen():
             monster.death(player)
             flee = False
             field_screen(flee)
-        elif player.current_hp <= 0:
-            print("Game over.")
-            #todo
 
 def initialise_battle():
     """
@@ -370,7 +369,7 @@ def game_over():
     print("Perhaps the fates will be kinder to the next one.")
     print("Try again?")
     while True:
-        yes_no = input("Commands: \yes | no \n\n")
+        yes_no = input("Commands: yes | no \n\n")
         if yes_no.lower() == "yes":
             main()
         elif yes_no.lower() == "no":
