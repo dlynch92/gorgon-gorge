@@ -81,8 +81,7 @@ class Player:
         if self.current_hp > self.max_hp:
             self.current_hp = self.max_hp
         self.potions -= 1
-        print(f"Current HP: {self.current_hp}/{self.max_hp}")
-        print(f"Potions remaining: {self.potions}")
+        print(f"Potions remaining: {self.potions}\n")
 
     def defend(self, monster):
         """
@@ -90,12 +89,11 @@ class Player:
         rounded up but the original value is stored in the original_defense variable within the battle scene, and player defense is set back 
         to that after the monster takes a turn.
         """
-        print(f"You raise your shield, prepared for the {monster.name}'s next strike.")
+        print(f"You raise your shield, prepared for the {monster.name}'s next strike.\n")
         self.defense = math.ceil(self.defense * 1.5)
-        print("Defense increased.")
 
 class Monster:
-    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack):
+    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack, recharging):
         self.name = name
         self.gold = gold
         self.max_hp = max_hp
@@ -104,6 +102,7 @@ class Monster:
         self.defense = defense
         self.nature = nature
         self.storing_attack = storing_attack
+        self.recharging = recharging
 
     def death(self, player):
         """
@@ -126,8 +125,6 @@ class Monster:
         calculate_damage_to_player(player, self)
         if player.current_hp <= 0:
             player.current_hp = 0
-        print(f"Current HP: {player.current_hp}/{player.max_hp}")
-        if player.current_hp == 0:
             game_over()
 
 class Goblin(Monster):
@@ -136,13 +133,13 @@ class Goblin(Monster):
         random_number = random.randrange(1,5)
         match random_number:
             case 1:
-                Monster.__init__(self,"Goblin", 5, 9, 10, 4, 3, "malnurished", False)
+                Monster.__init__(self,"Goblin", 5, 9, 10, 4, 3, "malnurished", False, False)
             case 2:
-                Monster.__init__(self,"Goblin", 5, 11, 16, 6, 3, "powerful", False)
+                Monster.__init__(self,"Goblin", 5, 11, 16, 6, 3, "powerful", False, False)
             case 3:
-                Monster.__init__(self,"Goblin", 5, 11, 13, 7, 3, "ferocious", False)
+                Monster.__init__(self,"Goblin", 5, 11, 13, 7, 3, "ferocious", False, False)
             case 4:
-                Monster.__init__(self,"Goblin", 5, 9, 13, 5, 3, "timid", False)  
+                Monster.__init__(self,"Goblin", 5, 9, 13, 5, 3, "timid", False, False)  
     
     def action_determiner(self):
         """
@@ -151,8 +148,11 @@ class Goblin(Monster):
         """
         match self.turn_count:
             case 1:
-                self.attack_command(player)
-                self.turn_count += 1
+                if self.recharging == True:
+                    print("The Goblin shuffles around trying to regain its footing after the last attack.\n")
+                else:
+                    self.attack_command(player)
+                    self.turn_count += 1
             case 2: 
                 if self.nature == "malnurished" or self.nature == "timid":
                     print(f"The Goblin looks too {self.nature} to do anything.\n")
@@ -162,15 +162,19 @@ class Goblin(Monster):
                     self.storing_attack = True 
                 self.turn_count += 1
             case 3:                
-                self.storing_attack = False
                 self.attack_command(player)
+                self.storing_attack = False
+                self.recharching = True
                 self.turn_count = 1
 
     def attack_description(self):
         """
         Description when the Goblin uses an attack.
         """
-        print("The Goblin raises its mace and swipes at you.")
+        if self.storing_attack == True:
+            print("The Goblin dashes forward and jumps, putting its entire weight behind a huge overhead swing.")
+        else:
+            print("The Goblin raises its mace and swipes at you.")
 
 
 def title_screen():
@@ -283,7 +287,8 @@ def battle_screen():
        
     while True:
         if monster.current_hp > 0:
-            battle_input = input("Commands: \nattack | defend | potion | status | flee\n\n")
+            print(f"Current HP: {player.current_hp}/{player.max_hp}")
+            battle_input = input("Commands: attack | defend | potion | status | flee\n\n")
             if battle_input.lower() == "attack":
                 player.attack_command(monster)
                 monster.action_determiner()
@@ -370,6 +375,7 @@ def game_over():
     Called when the player's HP reaches 0 - they have lost. Takes yes/no command to see if they want to play again from
     the start. Yes will restart game, no will quit game.
     """
+    print(f"Current HP: {player.current_hp}/{player.max_hp}")
     print("Your journey is over - Gorgon Gorge claims the life of another.")
     print("Perhaps the fates will be kinder to the next one.")
     print("Try again?")
