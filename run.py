@@ -90,7 +90,7 @@ class Player:
         print("Defense increased.")
 
 class Monster:
-    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature):
+    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack):
         self.name = name
         self.gold = gold
         self.max_hp = max_hp
@@ -98,6 +98,7 @@ class Monster:
         self.attack = attack
         self.defense = defense
         self.nature = nature
+        self.storing_attack = storing_attack
 
     def death(self, player):
         """
@@ -109,13 +110,6 @@ class Monster:
         print("You win!")
         print(f"On the body of the {self.name} you find {self.gold} gold, bringing your total to {player.gold}.\n")
         player.battles_won += 1
-    
-    def action(self, player):
-        """
-        Determines what the monster's action will be this turn, based off their nature, and calls the relevant function.
-        """
-        print(f"monster chomp {player.name}")
-        #todo
 
 class Goblin(Monster):
     def __init__(self, turn_count):
@@ -123,14 +117,43 @@ class Goblin(Monster):
         random_number = random.randrange(1,5)
         match random_number:
             case 1:
-                Monster.__init__(self,"Goblin", 5, 9, 10, 4, 3, "malnurished")
+                Monster.__init__(self,"Goblin", 5, 9, 10, 4, 3, "malnurished", False)
             case 2:
-                Monster.__init__(self,"Goblin", 5, 11, 16, 6, 3, "powerful")
+                Monster.__init__(self,"Goblin", 5, 11, 16, 6, 3, "powerful", False)
             case 3:
-                Monster.__init__(self,"Goblin", 5, 11, 13, 7, 3, "ferocious")
+                Monster.__init__(self,"Goblin", 5, 11, 13, 7, 3, "ferocious", False)
             case 4:
-                Monster.__init__(self,"Goblin", 5, 9, 13, 5, 3, "timid")  
+                Monster.__init__(self,"Goblin", 5, 9, 13, 5, 3, "timid", False)  
     
+    def action_determiner(self):
+        """
+        Determines what the monster's action will be this turn, based off their nature, and calls the relevant function.
+        """
+        match self.turn_count:
+            case 1:
+                self.attack_command()
+            case 2: 
+                if self.nature == "malnurished" or self.nature == "timid":
+                    print(f"The Goblin looks too {self.nature} to do anything.")
+                else: 
+                    print(f"The {self.nature} Goblin bangs its mace against its shield and lets out a bloodthirsty bellow.")
+                    print("It's readying itself for a powerful blow.")
+                    self.storing_attack = True 
+            case 3:                
+                self.storing_attack = False
+                self.attack_command()
+                self.turn_count = 1
+
+    def attack_command(self, player):
+        
+        print("The Goblin raises its mace and swipes at you.")
+        calculate_damage_to_player()
+        if player.current_hp <= 0:
+            player.current_hp = 0
+        print(f"Current HP: {player.current_hp}/{player.max_hp}\n")
+        if player.current_hp = 0:
+            game_over()
+
 player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
 
 def title_screen():
@@ -176,7 +199,6 @@ def player_name_input():
                     print("Input not recognised.\n")
             break 
 
-        
 def player_name_validation(player_name):
     """
     Validates player name by ensuring it is between 3 and 15 characters long, contains no special characters,
@@ -305,8 +327,30 @@ def calculate_damage_to_monster(player, monster, critical):
     if damage < 0:
         damage = 0
     monster.current_hp = monster.current_hp - damage
-    print(f"You deal {damage} points of damage.")    
+    print(f"You deal {damage} points of damage to the {monster.name}.\n")    
 
+def calculate_damage_to_player(player, monster):
+    """
+    Calculates the damage a monster deals to the player when the attack command is taken. Random number is generated to
+    determine variance so that they are not always dealing the exact same number. If a monster has stored an attack they will
+    deal critical damage.
+    """
+    damage = 0
+    if monster.storing_attack == True:
+        damage = monster.attack * 2 - player.defense
+    else:
+        damage_variance_determiner = random.randrange(1,21)
+        damage_variance = 0
+        if damage_variance_determiner <= 4:
+            damage_variance = 2
+        elif damage_variance_determiner >= 16:
+            damage_variance = 1                
+        damage = (monster.attack - player.defense) + damage_variance
+    if damage < 0:
+        damage = 0
+    player.current_hp = player.current_hp - damage
+    print(f"The {monster.name} inflicts {damage} points of damage to you.")
+    
 def main():
     """
     Run all program functions   
