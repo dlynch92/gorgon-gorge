@@ -93,7 +93,7 @@ class Player:
         self.defense = math.ceil(self.defense * 2.5)
 
 class Monster:
-    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack, recharging):
+    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack, recharging, turn_count):
         self.name = name
         self.gold = gold
         self.max_hp = max_hp
@@ -103,6 +103,7 @@ class Monster:
         self.nature = nature
         self.storing_attack = storing_attack
         self.recharging = recharging
+        self.turn_count = turn_count
 
     def death(self, player):
         """
@@ -128,8 +129,7 @@ class Monster:
             game_over()
 
 class Goblin(Monster):
-    def __init__(self, turn_count):
-        self.turn_count = turn_count
+    def __init__(self):
         random_number = random.randrange(1,5)
         match random_number:
             case 1:
@@ -163,8 +163,9 @@ class Goblin(Monster):
                 self.turn_count += 1
             case 3:                
                 self.attack_command(player)
+                if self.storing_attack == True:
+                    self.recharging = True
                 self.storing_attack = False
-                self.recharging = True
                 self.turn_count = 1
 
     def attack_description(self):
@@ -176,6 +177,32 @@ class Goblin(Monster):
         else:
             print("The Goblin raises its mace and swipes at you.")
 
+class Siren(Monster):
+    def __init__(self):
+        random_number = random.randrange(1,3)
+        match random_number:
+            case 1:
+                Monster.__init__(self,"Siren", 5, 10, 10, 4, 2, "wistful", False, False)
+            case 2:
+                Monster.__init__(self,"Siren", 5, 15, 15, 5, 3, "aloof", False, False)
+
+class Sprite(Monster):
+    def __init__(self):
+        random_number = random.randrange(1,3)
+        match random_number:
+            case 1:
+                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "tiny", False, False)
+            case 2:
+                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "swift", False, False)
+
+class Troll(Monster):
+    def __init__(self):
+        random_number = random.randrange(1,3)
+        match random_number:
+            case 1:
+                Monster.__init__(self,"Siren", 5, 10, 10, 4, 2, "gangly", False, False)
+            case 2:
+                Monster.__init__(self,"Siren", 5, 15, 15, 5, 3, "angry", False, False)
 
 def title_screen():
     """
