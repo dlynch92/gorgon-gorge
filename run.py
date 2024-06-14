@@ -65,6 +65,20 @@ class Player:
             critical = False
             calculate_damage_to_monster(player, monster, critical)
 
+    def potion(self):
+        """
+        Uses a potion to restore 50% of a players max HP to their current HP, ensure player current HP is no higher than their max hp,
+        and reduce the player's potion count by 1
+        """
+        print("You reach into your bag and pick out a potion.")
+        print(f"You drink it - feeling refreshed and restoring {math.ceil(self.max_hp / 2)} HP.")
+        self.current_hp = self.current_hp + (math.ceil(self.max_hp / 2))
+        if self.current_hp > self.max_hp:
+            self.current_hp = self.max_hp
+        self.potions -= 1
+        print(f"Current HP: {self.current_hp}/{self.max_hp}")
+        print(f"Potions remaining: {self.potions}")
+
     def defend(self, monster):
         """
         Increases the player's defense rating for the remainder of the turn. The defense value of the player is multiplied by 1.5 and 
@@ -225,9 +239,13 @@ def battle_screen():
                 player.defend(monster)
                 monster.action(player)
                 player.defense = original_defense
-                #todo
             elif battle_input.lower() == "potion":
-                print("Potion")
+                if player.potions > 0:
+                    player.potion()
+                    monster.action(player)
+                else:
+                    print("You reach for a potion, but have none.")
+                    print(f"The {monster.name} awaits your input.")
                 #todo
             elif battle_input.lower() == "status":
                 player.status()
