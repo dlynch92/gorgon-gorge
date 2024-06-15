@@ -321,16 +321,15 @@ def field_description():
 
 def shop_screen():
     """
-    Displays items the player can buy in between battles. Updates list based off amount of battles won. When an item is selected,
-    displays a description of the item and checks if the player has enough gold to buy it. Confirms if the player wants to buy it, and if 
-    yes deducts the gold total from the player and gives them the item. If it is equipment it is automatically applied to the player's stats. 
+    Displays items and stats the player can buy in between battles. Displays an array of items and upradable stats and takes user
+    input, if it matches then moves onto shop_quantity_input to take the quantity required to finalise the purchase. 
     """
-    print("A voice rings out from the ether.")
+    print("A voice rings out from the aether.")
     print('"Looking for potions? Or do you want to increase your stats?"')
     while True:
         print(shop)
         print(f"Current Gold: {player.gold}\n")
-        shop_input = input("Commands: Type name of item/stat above | exit \n\n")
+        shop_input = input("Commands: Type name of item/stat above | status | exit \n\n")
         shop_lower = shop
         shop_lower = {letters.lower(): l for letters, l in shop_lower.items()}
         if shop_input.lower() in shop_lower and shop_input.lower() != "potion":
@@ -339,26 +338,31 @@ def shop_screen():
         elif shop_input.lower() == "potion":
             print('"Aah a potion? 3 gold each."')
             shop_quantity_input(shop_input, shop_lower)
+        elif shop_input.lower() == "status":
+            player.status()
+            print('"You still want to buy something?"')
         elif shop_input.lower() == "exit":
-            print('"See you around. \n"')
+            print('"See you around."')
             flee = True
-            print("The voice dissipates - You return your attention to your surroundings.")
+            print("The voice dissipates - You return your attention to your surroundings. \n")
             field_screen(flee)
         else:
             print('"We do not stock that item, ask again."')
 
 def shop_quantity_input(shop_input, shop_lower):
         """
-        Takes quantity of items player wants to buy, validates if a number is entered and if they can afford it.
+        Takes quantity of items player wants to buy, validates if a number is entered and if they can afford it,
+        then adds purchase to the player object and returns them to the shop screen.
         """
         while True:
             buying = shop_lower.get(shop_input.lower())
-            quantity = int(input('"How many do you want?\n"'))
+            quantity = int(input('"How many do you want?"\n'))
             gold_needed = buying * quantity
             print(f'"You want {quantity} at {buying} gold each. That will be {gold_needed} gold."')
+            print('"Are you sure?"')
             print(f"Current Gold: {player.gold}\n")
             while True:
-                yes_no = input("Are you sure?")
+                yes_no = input("Commands: yes | no\n")
                 if yes_no.lower() == "yes" and player.gold >= gold_needed:
                     match shop_input.lower():
                         case "potion":
@@ -381,7 +385,7 @@ def shop_quantity_input(shop_input, shop_lower):
                     print('"No credit, cash only. Come back when you have enough."')
                     break
                 if yes_no.lower() == "no":
-                    print('"Want something else?')
+                    print('"Want something else?"')
                     break
                 else: print("Invalid input")
             break
