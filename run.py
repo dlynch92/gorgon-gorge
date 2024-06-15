@@ -73,13 +73,16 @@ class Player:
         Uses a potion to restore 50% of a players max HP to their current HP, ensure player current HP is no higher than their max hp,
         and reduce the player's potion count by 1
         """
-        print("You reach into your bag and pick out a potion.")
-        print(f"You drink it - feeling refreshed and restoring {math.ceil(self.max_hp / 2)} HP.")
-        self.current_hp = self.current_hp + (math.ceil(self.max_hp / 2))
-        if self.current_hp > self.max_hp:
-            self.current_hp = self.max_hp
-        self.potions -= 1
-        print(f"Potions remaining: {self.potions}\n")
+        if player.potions > 0:
+            print("You reach into your bag and pick out a potion.")
+            print(f"You drink it - feeling refreshed and restoring {math.ceil(self.max_hp / 2)} HP.")
+            self.current_hp = self.current_hp + (math.ceil(self.max_hp / 2))
+            if self.current_hp > self.max_hp:
+                self.current_hp = self.max_hp
+            self.potions -= 1
+            print(f"Potions remaining: {self.potions}\n")
+        else: 
+            print("You reach for a potion, but have none.")
 
     def defend(self, monster):
         """
@@ -143,7 +146,7 @@ class Goblin(Monster):
         """
         Description of the monster when it appears.
         """
-        print(textwrap.fill("You turn the corner - a wall of foul stench permeates the air. Standing there, poised for battle, is a raggedy humanoid creature. Its sharp teeth are bared and it carries a blunt mace in one hand and a small shield in the other. You know what this is, every adventurer in the world knows what this is - A goblin. A persistant blight in the world outside of the safety of the city walls."))
+        print(textwrap.fill("You turn the corner - a wall of foul stench permeates the air. Standing there, poised for battle, is a raggedy humanoid creature. Its sharp teeth are bared and it carries a blunt mace in one hand and a small shield in the other. You know what this is, every adventurer in the world knows what this is - A goblin. A persistant blight in the world outside of the safety of the city walls.", 80))
         print("")
         print(f"It looks {self.nature}.\n")
 
@@ -191,6 +194,45 @@ class Siren(Monster):
                 Monster.__init__(self,"Siren", 5, 10, 10, 4, 2, "wistful", False, False, 1)
             case 2:
                 Monster.__init__(self,"Siren", 5, 15, 15, 5, 3, "aloof", False, False, 1)
+
+    def introduction(self):
+        """
+        Description of the monster when it appears.
+        """
+        print(textwrap.fill("Quiet at first, but getting louder by the second, you hear the humming of a melanchonic song. It comes into focus, quickly drowning out the ambience of the grove. It's beautiful and sad - and hideous. Evil, even.", 80))
+        print("")
+        print(textwrap.fill("You descend a steep rock and find the source of the noise hiding in a large alcove. A feminine humanoid form stands there humming her song, barely bothered by your presence. She would be beautiful, lest for the layer of corpses that adorn the floor of her abode.", 80))
+        print("")
+        print("These poor souls were adventurers too, you imagine. But they were not as prepared as you - you know what this monster is. A siren.")
+        print("")
+        print(f"It looks {self.nature}.\n")
+
+
+    def action_determiner(self):
+        match self.turn_count:
+            case 1:
+                print("The siren does not react to your presence - she continues to hum.\n")
+                self.turn_count += 1    
+            case 2: 
+                print("The siren does not react to your presence - her humming becomes more intense.\n")
+                self.turn_count += 1
+            case 3:                
+                print("The siren does not react to your presence - her humming builds to a crescendo.\n")
+                self.turn_count += 1
+            case 4: 
+                print("The siren's song takes over your body and drains your life. You feel weak.")
+                print("Your HP is reduced to 1.")
+                print("The siren reacts to your presence - the humming stops. She looks poised to attack.\n")
+                player.current_hp = 1
+                self.turn_count += 1
+            case 5:
+                self.attack_command(player)
+
+    def attack_description(self):
+        """
+        Description when the Siren uses an attack.
+        """
+        print("The Siren erratically flails at you with her claws.")
 
 class Sprite(Monster):
     def __init__(self):
@@ -293,7 +335,7 @@ def field_screen(flee):
        field_description()
 
     while True:
-        field_input = input("Commands: battle | shop | status \n\n")
+        field_input = input("Commands: battle | shop | status | potion \n\n")
         if field_input.lower() == "battle":
             print("You raise your sword.\n")
             battle_screen()
@@ -301,6 +343,8 @@ def field_screen(flee):
             shop_screen()
         elif field_input.lower() == "status":
             player.status()
+        elif field_input.lower() == "potion":
+            player.potion()
         else:
             print("Input not recognised.\n")
 
@@ -315,7 +359,12 @@ def field_description():
             print(textwrap.fill("As you advance deeper into the gorge the peaceful ambience gives way to something more sinister. Growling. The gnashing of teeth. A sense of forboding. Around the next bend, you know, something waits — something unknown and undoubtedly dangerous.", 80))
             print("")
         case 1:
-            print("You won a fight! Back to the field screen")
+            print(textwrap.fill("The tension in the air is lifted now that the threat of the goblin has passed - but you've heard the stories. Stories of adventurers greater than you that have never made it back from this twisted place. Adventurers that would not fall victim to a measly goblin, or even ten.", 80))
+            print("")
+            print("There will be worse to come.\n")
+            print(textwrap.fill("Deeper you venture - the path becoming less and less distinct and travelled as the minutes go by. The stench of goblin has long since passed, the air now thick with the scent of moss. A trail of bioluminescent fungi leads the way forward - down, and down, and down.",80))
+            print("")
+            print("Until it hits you again. That forboding. Worse than the last.\n")
 
 def shop_screen():
     """
@@ -433,7 +482,6 @@ def battle_screen():
                 else:
                     print("You reach for a potion, but have none.")
                     print(f"The {monster.name} awaits your input.")
-                #todo
             elif battle_input.lower() == "status":
                 player.status()
                 print(f"The {monster.name} awaits your input.")
@@ -459,9 +507,9 @@ def initialise_battle():
             if random_number == 1:
                 monster = Siren()
             if random_number == 2:
-                monster = Sprite()
+                monster = Siren()
             if random_number == 3:
-                monster = Troll()
+                monster = Siren()
             return monster            
 
 def calculate_damage_to_monster(player, monster, critical):
