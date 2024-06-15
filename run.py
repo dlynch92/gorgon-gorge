@@ -5,15 +5,13 @@ import math
 from time import sleep
 
 class Player:
-    def __init__(self, name, gold, max_hp, current_hp, attack, defense, sword, shield, critical_threshold, potions, battles_won):
+    def __init__(self, name, gold, max_hp, current_hp, attack, defense, critical_threshold, potions, battles_won):
         self.name = name
         self.gold = gold
         self.max_hp = max_hp
         self.current_hp = current_hp
         self.attack = attack
         self.defense = defense
-        self.sword = sword
-        self.shield = shield
         self.critical_threshold = critical_threshold
         self.potions = potions
         self.battles_won = battles_won
@@ -23,8 +21,8 @@ class Player:
         Displays the player's name, hp, attack, defense, gold and equipment whenever the status command is picked.
         """
         print(f"The Adventurer {player.name}:")
-        print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense} | Gold: {player.gold}")
-        print(f"Sword: {player.sword} | Shield: {player.shield} | Potions: {player.potions}\n")
+        print(f"HP: {player.current_hp}/{player.max_hp} | Attack: {player.attack} | Defense: {player.defense}")
+        print(f"Gold: {player.gold} | Potions: {player.potions}\n")
 
     def flee(self, monster):
         """
@@ -515,7 +513,7 @@ def main():
     Run all program functions.
     """
     global player
-    player = Player("", 5, 10, 10, 5, 3, "Short Sword", "Leather Shield", 19, 1, 0)
+    player = Player("", 5, 10, 10, 5, 3, 19, 1, 0)
     title_screen()
     player_name_input()
     flee = False
