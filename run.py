@@ -3,6 +3,8 @@ import textwrap
 import random
 import math
 from time import sleep
+import wordtodigits
+
 
 class Player:
     def __init__(self, name, gold, max_hp, current_hp, attack, defense, critical_threshold, potions, battles_won):
@@ -146,9 +148,9 @@ class Goblin(Monster):
             case 1:
                 Monster.__init__(self,"Goblin", 5, 10, 10, 4, 2, "malnurished", False, False, 1)
             case 2:
-                Monster.__init__(self,"Goblin", 5, 15, 15, 5, 3, "large", False, False, 1)
+                Monster.__init__(self,"Goblin", 8, 15, 15, 5, 3, "large", False, False, 1)
             case 3:
-                Monster.__init__(self,"Goblin", 5, 10, 10, 7, 2, "ferocious", False, False, 1)
+                Monster.__init__(self,"Goblin", 8, 10, 10, 7, 2, "ferocious", False, False, 1)
             case 4:
                 Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False, 1)  
     
@@ -245,13 +247,48 @@ class Siren(Monster):
         print("The Siren erratically flails at you with her claws.")
 
 class Sprite(Monster):
-    def __init__(self):
+    def __init__(self, always_miss):
+        self.always_miss = always_miss
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "tiny", False, False, 1)
+                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "lethargic", False, False, 1)
             case 2:
-                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "swift", False, False, 1)
+                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "hyperactive", False, False, 1)
+
+    def introduction(self):
+        """
+        Description of the monster when it appears.
+        """
+        print(textwrap.fill("It's a sprite.", 80))
+        print(f"It looks {self.nature}.\n")
+
+    def action_determiner(self):
+        match self.turn_count:
+            case 1:
+                self.attack_command(player)
+                self.turn_count += 1    
+            case 2:
+                if self.nature == "lethargic":
+                    print("The Sprite draws some dust from its pocket and sprinkles it on an arrow.")
+                    print("An intense magical aura emanates from the arrow tip.")
+                    self.storing_attack = True
+                elif self.nature == "hyperactive":
+                    print("The Sprite begins to zip around the air at supersonic speeds.")
+                    print("You can't tell where it is.")
+                    self.always_miss == True
+                
+
+    def attack_description(self):
+        """
+        Description when the Sprite uses an attack.
+        """
+        if self.storing_attack == True:
+            print(textwrap("In the blink of an eye the Sprite's longbow is drawn and fired - the arrow rips through the air faster than you can comprehend.", 80))
+        elif self.always_miss == True:
+            print(textwrap("Out of nowhere an arrow pierces your flesh."))
+        else:
+            print("The Sprite draws its longbow and fires.")
 
 class Troll(Monster):
     def __init__(self):
@@ -414,13 +451,14 @@ def shop_quantity_input(shop_input, shop_lower):
         while True:
             buying = shop_lower.get(shop_input.lower())
             quantity = input('"How many do you want?"\n\n')
+            quantity = wordtodigits.convert(quantity)
             if shop_quantity_input_validation(quantity):
                 quantity = int(quantity)
                 gold_needed = buying * quantity
                 if quantity == 0:
                     print('"Want something else, then?"')
                     break
-                print(f'"You want {quantity} at {buying} gold each. That will be {gold_needed} gold."')
+                print(f'"You want {quantity}? That will be {gold_needed} gold in total."')
                 print('"Are you sure?"')
                 print(f"Current Gold: {player.gold}\n")
                 while True:
@@ -519,7 +557,7 @@ def initialise_battle():
             if random_number == 2:
                 monster = Siren()
             if random_number == 3:
-                monster = Siren()
+                monster = Sprite(False)
             return monster            
 
 def calculate_damage_to_monster(player, monster, critical):
