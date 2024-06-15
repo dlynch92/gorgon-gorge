@@ -450,8 +450,7 @@ def shop_quantity_input(shop_input, shop_lower):
         """
         while True:
             buying = shop_lower.get(shop_input.lower())
-            quantity = input('"How many do you want?"\n\n')
-            quantity = wordtodigits.convert(quantity)
+            quantity = wordtodigits.convert(input('"How many do you want?"\n\n'))
             if shop_quantity_input_validation(quantity):
                 quantity = int(quantity)
                 gold_needed = buying * quantity
