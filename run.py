@@ -53,7 +53,7 @@ class Player:
         random_number = random.randrange(1,21)
         sleep(1)
         if random_number == 1:
-            print(f"The {monster.name} dodges the attack.")
+            print(f"The {monster.name} dodges the attack.\n")
         elif random_number >= player.critical_threshold:
             print(f"You rend your sword through the {monster.name}'s flesh, dealing critical damage.")
             critical = True
@@ -176,7 +176,7 @@ class Goblin(Monster):
                 if self.nature == "malnurished" or self.nature == "timid":
                     print(f"The Goblin looks too {self.nature} to do anything.\n")
                 else: 
-                    print(f"The {self.nature} Goblin bangs its mace against its shield and lets out a bloodthirsty bellow.")
+                    print(textwrap.fill(f"The {self.nature} Goblin bangs its mace against its shield and lets out a bloodthirsty bellow.", 80))
                     print("It's readying itself for a powerful blow.\n")
                     self.storing_attack = True 
                 self.turn_count += 1
@@ -232,7 +232,7 @@ class Siren(Monster):
             case 4: 
                 print("The siren's song takes over your body and drains your life. You feel weak.")
                 print("Your HP is reduced to 1.")
-                print("The siren reacts to your presence - the humming stops. She looks poised to attack.\n")
+                print("The siren reacts to your presence - the humming stops. She is poised to attack.\n")
                 player.current_hp = 1
                 self.turn_count += 1
             case 5:
