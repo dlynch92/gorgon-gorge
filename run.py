@@ -214,8 +214,9 @@ class Troll(Monster):
 
 shop = {
     "Potion": 3,
-    "Long Sword": 8,
-    "Hide Shield": 6,
+    "HP": 2,
+    "Attack": 5,
+    "Defence": 5,
 }
 
 def title_screen():
@@ -325,15 +326,66 @@ def shop_screen():
     yes deducts the gold total from the player and gives them the item. If it is equipment it is automatically applied to the player's stats. 
     """
     print("A voice rings out from the ether.")
-    print('"What are you buying?"')
-    print(shop)
+    print('"Looking for potions? Or do you want to increase your stats?"')
     while True:
-        shop_input = input(f"Current Gold: {player.gold}\n")
-        if shop_input in shop:
-            print(f'"Ahh, a {shop_input}? That will be {shop_input[int]} gold.')
+        print(shop)
+        print(f"Current Gold: {player.gold}\n")
+        shop_input = input("Commands: Type name of item/stat above | exit \n\n")
+        shop_lower = shop
+        shop_lower = {letters.lower(): l for letters, l in shop_lower.items()}
+        if shop_input.lower() in shop_lower and shop_input.lower() != "potion":
+            print(f'"Ahh, you want to upgrade your {shop_input}?"')
+            shop_quantity_input(shop_input, shop_lower)
+        elif shop_input.lower() == "potion":
+            print('"Aah a potion? 3 gold each."')
+            shop_quantity_input(shop_input, shop_lower)
+        elif shop_input.lower() == "exit":
+            print('"See you around. \n"')
+            flee = True
+            print("The voice dissipates - You return your attention to your surroundings.")
+            field_screen(flee)
         else:
             print('"We do not stock that item, ask again."')
 
+def shop_quantity_input(shop_input, shop_lower):
+        """
+        Takes quantity of items player wants to buy, validates if a number is entered and if they can afford it.
+        """
+        while True:
+            buying = shop_lower.get(shop_input.lower())
+            quantity = int(input('"How many do you want?\n"'))
+            gold_needed = buying * quantity
+            print(f'"You want {quantity} at {buying} gold each. That will be {gold_needed} gold."')
+            print(f"Current Gold: {player.gold}\n")
+            while True:
+                yes_no = input("Are you sure?")
+                if yes_no.lower() == "yes" and player.gold >= gold_needed:
+                    match shop_input.lower():
+                        case "potion":
+                             player.potions += quantity
+                             print('"They leave a bad taste in your mouth, but it beats being dead."')
+                        case "hp":
+                            player.max_hp += quantity
+                            player.current_hp += quantity
+                            print('"Feeling healthier already, I bet."')
+                        case "defense":
+                            player.defense += quantity
+                            print('"If nothing can hurt you then nothing can kill you. Good choice."')
+                        case "attack":
+                            player.attack += quantity
+                            print('"The best offense is a good offense, I always say."')
+                    player.gold -= gold_needed
+                    print('"Pleasure doing business."')
+                    break
+                if yes_no.lower() == "yes" and player.gold < gold_needed:
+                    print('"No credit, cash only. Come back when you have enough."')
+                    break
+                if yes_no.lower() == "no":
+                    print('"Want something else?')
+                    break
+                else: print("Invalid input")
+            break
+            
 def battle_screen():
     """
     Takes players commands during a battle and executes the relevant player object function
