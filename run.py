@@ -354,40 +354,59 @@ def shop_quantity_input(shop_input, shop_lower):
         """
         while True:
             buying = shop_lower.get(shop_input.lower())
-            quantity = int(input('"How many do you want?"\n'))
-            gold_needed = buying * quantity
-            print(f'"You want {quantity} at {buying} gold each. That will be {gold_needed} gold."')
-            print('"Are you sure?"')
-            print(f"Current Gold: {player.gold}\n")
-            while True:
-                yes_no = input("Commands: yes | no\n")
-                if yes_no.lower() == "yes" and player.gold >= gold_needed:
-                    match shop_input.lower():
-                        case "potion":
-                             player.potions += quantity
-                             print('"They leave a bad taste in your mouth, but it beats being dead."')
-                        case "hp":
-                            player.max_hp += quantity
-                            player.current_hp += quantity
-                            print('"Feeling healthier already, I bet."')
-                        case "defense":
-                            player.defense += quantity
-                            print('"If nothing can hurt you then nothing can kill you. Good choice."')
-                        case "attack":
-                            player.attack += quantity
-                            print('"The best offense is a good offense, I always say."')
-                    player.gold -= gold_needed
-                    print('"Pleasure doing business."')
+            quantity = input('"How many do you want?"\n\n')
+            if shop_quantity_input_validation(quantity):
+                quantity = int(quantity)
+                gold_needed = buying * quantity
+                if quantity == 0:
+                    print('"Want something else, then?"')
                     break
-                if yes_no.lower() == "yes" and player.gold < gold_needed:
-                    print('"No credit, cash only. Come back when you have enough."')
-                    break
-                if yes_no.lower() == "no":
-                    print('"Want something else?"')
-                    break
-                else: print("Invalid input")
-            break
-            
+                print(f'"You want {quantity} at {buying} gold each. That will be {gold_needed} gold."')
+                print('"Are you sure?"')
+                print(f"Current Gold: {player.gold}\n")
+                while True:
+                    yes_no = input("Commands: yes | no\n\n")
+                    if yes_no.lower() == "yes" and player.gold >= gold_needed:
+                        match shop_input.lower():
+                            case "potion":
+                                player.potions += quantity
+                                print('"They leave a bad taste in your mouth, but it beats being dead."')
+                            case "hp":
+                                player.max_hp += quantity
+                                player.current_hp += quantity
+                                print('"Feeling healthier already, I bet."')
+                            case "defense":
+                                player.defense += quantity
+                                print('"If nothing can hurt you then nothing can kill you. Good choice."')
+                            case "attack":
+                                player.attack += quantity
+                                print('"The best offense is a good offense, I always say."')
+                        player.gold -= gold_needed
+                        print('"Pleasure doing business."')
+                        break
+                    if yes_no.lower() == "yes" and player.gold < gold_needed:
+                        print('"No credit, cash only. Come back when you have enough."')
+                        break
+                    if yes_no.lower() == "no":
+                        print('"Want something else?"')
+                        break
+                    else: print("Invalid input")
+                break
+
+def shop_quantity_input_validation(quantity):
+    """
+    Ensures the quantity input in the shop is a valid integer between 0 and 99 and returns an error if not.
+    """
+    try: 
+        quantity = int(quantity)
+        if quantity < 0 or quantity >=100:
+            raise ValueError()
+    except ValueError:
+        print(f"Input invalid: Please enter a number between 0 and 99.\n")
+        return False
+    else:
+        return True
+
 def battle_screen():
     """
     Takes players commands during a battle and executes the relevant player object function
