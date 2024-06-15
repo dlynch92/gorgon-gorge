@@ -266,7 +266,7 @@ shop = {
     "Potion": 3,
     "HP": 2,
     "Attack": 5,
-    "Defence": 5,
+    "Defense": 5,
 }
 
 def title_screen():
