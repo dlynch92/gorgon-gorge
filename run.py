@@ -108,14 +108,24 @@ class Monster:
 
     def death(self, player):
         """
-        When monster current_hp is reduced to 0 then the monster dies. Add the monster's gold value to the player's gold
-        total and increase players battles won counter by 1.
+        When monster current_hp is reduced to 0 then the monster dies. Ask if the player wants to loot the monster,
+        Add the monster's gold value to the player's gold total if so and increase players battles won counter by 1.
         """
         player.gold = player.gold + self.gold
-        print(f"The {self.name} slumps over - defeated.")
-        print("You win!")
-        print(f"On the body of the {self.name} you find {self.gold} gold, bringing your total to {player.gold}.\n")
         player.battles_won += 1
+        print(f"The {self.name} slumps over - defeated.\n")
+        while True:
+            loot_input = input("Commands: loot | leave\n\n")
+            if loot_input.lower() == "loot":
+                print(f"On the body of the {self.name} you find {self.gold} gold, bringing your total to {player.gold}.\n")
+                sleep(3)
+                break
+            elif loot_input.lower() == "leave":
+                print("You move on, swiftly.")
+                sleep(3)
+                break
+            else: 
+                print("Invalid input.")
 
     def attack_command(self, player):
         """
@@ -191,9 +201,9 @@ class Siren(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Siren", 5, 10, 10, 4, 2, "wistful", False, False, 1)
+                Monster.__init__(self,"Siren", 7, 20, 20, 4, 4, "wistful", False, False, 1)
             case 2:
-                Monster.__init__(self,"Siren", 5, 15, 15, 5, 3, "aloof", False, False, 1)
+                Monster.__init__(self,"Siren", 7, 20, 20, 5, 3, "aloof", False, False, 1)
 
     def introduction(self):
         """
@@ -203,7 +213,7 @@ class Siren(Monster):
         print("")
         print(textwrap.fill("You descend a steep rock and find the source of the noise hiding in a large alcove. A feminine humanoid form stands there humming her song, barely bothered by your presence. She would be beautiful, lest for the layer of corpses that adorn the floor of her abode.", 80))
         print("")
-        print("These poor souls were adventurers too, you imagine. But they were not as prepared as you - you know what this monster is. A siren.")
+        print(textwrap.fill("These poor souls were adventurers too, you imagine. But they were not as prepared as you - you know what this monster is. A siren.", 80))
         print("")
         print(f"It looks {self.nature}.\n")
 
@@ -481,10 +491,10 @@ def battle_screen():
                     monster.action_determiner()
                 else:
                     print("You reach for a potion, but have none.")
-                    print(f"The {monster.name} awaits your input.")
+                    print(f"The {monster.name} awaits your input.\n")
             elif battle_input.lower() == "status":
                 player.status()
-                print(f"The {monster.name} awaits your input.")
+                print(f"The {monster.name} awaits your input.\n")
             elif battle_input.lower() == "flee":
                 player.flee(monster)
             else:
