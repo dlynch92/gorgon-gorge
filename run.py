@@ -438,6 +438,13 @@ def field_screen(flee, leave_shop):
             player.status()
         elif field_input.lower() == "potion":
             player.potion()
+        elif field_input.lower() == "dev":
+            player.max_hp = 999
+            player.current_hp = 999
+            player.potions = 999
+            player.attack = 100
+            player.defense = 100
+            print("Cheats\n")
         else:
             print("Input not recognised.\n")
 
