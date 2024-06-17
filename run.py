@@ -61,7 +61,7 @@ class Player:
             print(f"Despite the {monster.name}'s speed, your attack hits.")
             critical = False
             calculate_damage_to_monster(player, monster, critical)
-        elif monster.evasive == True and random_number >= player.critical_threshold
+        elif monster.evasive == True and random_number >= player.critical_threshold:
             print(textwrap.fill(f"Despite the {monster.name}'s speed, your attack hits and rends through the {monster.name}'s flesh, dealing critical damage.", 80))
             critical = True
             calculate_damage_to_monster(player, monster, critical)
