@@ -34,8 +34,8 @@ class Player:
         """
         print(f"You turn and attempt to flee from the {monster.nature} {monster.name}.")
         sleep(1)
-        random_number = random.randrange(1,3)
-        if random_number == 1:
+        random_number = random.randrange(1,5)
+        if random_number <= 3:
             print("And succeed!\n")
             sleep(0.5)
             flee = True
@@ -44,7 +44,7 @@ class Player:
         else:
             print("And fail!\n")
             sleep(0.5)
-            #monster attacks
+            monster.action_determiner()
 
     def attack_command(self, monster):
         """
