@@ -55,7 +55,17 @@ class Player:
         print(f"You swing your sword at the {monster.name}.")
         random_number = random.randrange(1,21)
         sleep(1)
-        if random_number == 1:
+        if monster.evasive == True and random_number <= 13:
+            print(f"And miss. The {monster.name} is moving too quickly to comprehend.")
+        elif monster.evasive == True and random_number > 13 and random_number < player.critical_threshold:
+            print(f"Despite the {monster.name}'s speed, your attack hits.")
+            critical = False
+            calculate_damage_to_monster(player, monster, critical)
+        elif monster.evasive == True and random_number >= player.critical_threshold
+            print(textwrap.fill(f"Despite the {monster.name}'s speed, your attack hits and rends through the {monster.name}'s flesh, dealing critical damage.", 80))
+            critical = True
+            calculate_damage_to_monster(player, monster, critical)
+        elif random_number == 1:
             print(f"The {monster.name} dodges the attack.\n")
         elif random_number >= player.critical_threshold:
             print(f"You rend your sword through the {monster.name}'s flesh, dealing critical damage.")
@@ -160,7 +170,6 @@ class Goblin(Monster):
         """
         Description of the monster when it appears.
         """
-        print(flee)
         if not flee:
             print(textwrap.fill("You turn the corner - a wall of foul stench permeates the air. Standing there, poised for battle, is a raggedy humanoid creature. Its sharp teeth are bared and it carries a blunt mace in one hand and a small shield in the other. You know what this is, every adventurer in the world knows what this is - A goblin. A persistant blight in the world outside of the safety of the city walls.", 80))
             print("")
@@ -258,12 +267,12 @@ class Siren(Monster):
         print("The Siren erratically flails at you with her claws.")
 
 class Sprite(Monster):
-    def __init__(self, always_miss):
-        self.always_miss = always_miss
+    def __init__(self, evasive):
+        self.evasive = evasive
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "lethargic", False, False, 1)
+                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "clumsy", False, False, 1)
             case 2:
                 Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "hyperactive", False, False, 1)
 
@@ -280,15 +289,41 @@ class Sprite(Monster):
                 self.attack_command(player)
                 self.turn_count += 1    
             case 2:
-                if self.nature == "lethargic":
+                if self.nature == "clumsy":
                     print("The Sprite draws some dust from its pocket and sprinkles it on an arrow.")
-                    print("An intense magical aura emanates from the arrow tip.")
+                    print("An intense magical aura emanates from the arrow tip.\n")
                     self.storing_attack = True
                 elif self.nature == "hyperactive":
                     print("The Sprite begins to zip around the air at supersonic speeds.")
-                    print("You can't tell where it is.")
-                    self.always_miss == True
-                
+                    print("You can't tell where it is.\n")
+                    self.evasive == True
+            case 3:
+                self.attack_command(player)
+                if self.storing_attack == True:
+                    self.recharging = True
+                self.storing_attack = False
+                self.turn_count += 1
+            case 4:
+                if self.recharging == True:
+                    print("The Sprite fumbles around with it's quill, reaching for more arrows.\n")
+                else:
+                    self.attack_command(player)
+                self.turn_count += 1
+            case 5:
+                if self.evasive == True:
+                    print("The Sprite's intense movements grind to a halt. It looks exhausted.\n")   
+                    self.recharging == True
+                else:
+                    self.attack_command(player)
+                self.turn_count += 1
+            case 6:
+                if self.recharging == True:
+                    print("The Sprite still looks tired. It levitates in place.\n")
+                    self.recharging == False
+                else:
+                    print("The Sprite fumbles around with it's quill, reaching for more arrows.\n")
+                self.turn_count = 1
+
 
     def attack_description(self):
         """
@@ -296,7 +331,7 @@ class Sprite(Monster):
         """
         if self.storing_attack == True:
             print(textwrap("In the blink of an eye the Sprite's longbow is drawn and fired - the arrow rips through the air faster than you can comprehend.", 80))
-        elif self.always_miss == True:
+        elif self.evasive == True:
             print(textwrap("Out of nowhere an arrow pierces your flesh."))
         else:
             print("The Sprite draws its longbow and fires.")
