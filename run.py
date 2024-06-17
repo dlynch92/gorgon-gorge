@@ -174,10 +174,9 @@ class Goblin(Monster):
         if not flee:
             print(textwrap.fill("You turn the corner - a wall of foul stench permeates the air. Standing there, poised for battle, is a raggedy humanoid creature. Its sharp teeth are bared and it carries a blunt mace in one hand and a small shield in the other. You know what this is, every adventurer in the world knows what this is - A goblin. A persistant blight in the world outside of the safety of the city walls.", 80))
             print("")
-            print(f"It looks {self.nature}.\n")
         else:
             print("You take a different route - Eventually, however, you encounter another Goblin.\n")
-            print(f"It looks {self.nature}\n")
+        print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
         """
@@ -235,11 +234,11 @@ class Siren(Monster):
             print("")
             print(textwrap.fill("These poor souls were adventurers too, you imagine. But they were not as prepared as you - you know what this monster is. A siren.", 80))
             print("")
-            print(f"It looks {self.nature}.\n")
+            
         else: 
             print(textwrap.fill("You take a different route - eventually however, a Siren's song begins anew. You feel compelled to follow it to the source. Another alcove, another pile of corpses. Another Siren.", 80))
             print("")
-            print(f"It looks {self.nature}.\n")
+        print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
         match self.turn_count:
@@ -272,15 +271,19 @@ class Sprite(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "clumsy", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 16, 10, 10, 4, 2, "clumsy", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "hyperactive", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 18, 15, 15, 5, 3, "hyperactive", False, False, 1, False)
 
     def introduction(self, flee):
         """
         Description of the monster when it appears.
         """
-        print(textwrap.fill("It's a sprite.", 80))
+        if not flee:
+            print(textwrap.fill("It's a sprite.", 80))
+            
+        else:
+            print("Its another sprite.")
         print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
@@ -342,9 +345,34 @@ class Troll(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Troll", 5, 10, 10, 4, 2, "gangly", False, False, 1)
+                Monster.__init__(self,"Troll", 5, 10, 10, 4, 2, "gangly", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Troll", 5, 15, 15, 5, 3, "angry", False, False, 1)
+                Monster.__init__(self,"Troll", 5, 15, 15, 5, 3, "angry", False, False, 1, False)
+
+    def action_determiner(self):
+        match self.turn_count:
+            case 1:
+                print("Troll")
+
+    def introduction(self, flee):
+        """
+        Description of the monster when it appears.
+        """
+        if not flee:
+            print(textwrap.fill("It's a Troll.", 80))
+            
+        else:
+            print("Its another Troll.")
+        print(f"It looks {self.nature}.\n")
+
+    def attack_description(self):
+        """
+        Description when the Troll uses an attack.
+        """
+        if self.storing_attack == True:
+            print("The Troll lets out a blood-curdling roar and swipes fiercly with its club.")
+        else:
+            print("The Troll swings its club.")
 
 shop = {
     "Potion": 3,
@@ -466,6 +494,11 @@ def field_description():
             print(textwrap.fill("Deeper you venture - the path becoming less and less distinct and travelled as the minutes go by. The stench of goblin has long since passed, the air now thick with the scent of moss. A trail of bioluminescent fungi leads the way forward - down, and down, and down.",80))
             print("")
             print("Until it hits you again. That forboding. Worse than the last.\n")
+        case 2: 
+            print(textwrap.fill("Next one", 80))
+        case 3:
+            print(textwrap.fill("Next one", 80))
+        
 
 def shop_screen(flee):
     """
@@ -603,7 +636,10 @@ def initialise_battle():
             return monster
         case 2: 
             monster = Sprite()
-            return monster           
+            return monster  
+        case 3: 
+            monster = Troll()
+            return monster                    
 
 def calculate_damage_to_monster(player, monster, critical):
     """
