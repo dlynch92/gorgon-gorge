@@ -297,6 +297,7 @@ class Sprite(Monster):
                     print("The Sprite begins to zip around the air at supersonic speeds.")
                     print("You can't tell where it is.\n")
                     self.evasive == True
+                self.turn_count += 1
             case 3:
                 self.attack_command(player)
                 if self.storing_attack == True:
