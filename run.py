@@ -299,7 +299,7 @@ class Sprite(Monster):
                 elif self.nature == "hyperactive":
                     print("The Sprite begins to zip around the air at supersonic speeds.")
                     print("You can't tell where it is.\n")
-                    self.evasive == True
+                    self.evasive = True
                 self.turn_count += 1
             case 3:
                 self.attack_command(player)
@@ -323,7 +323,7 @@ class Sprite(Monster):
             case 6:
                 if self.recharging == True:
                     print("The Sprite still looks tired. It levitates in place.\n")
-                    self.recharging == False
+                    self.recharging = False
                 else:
                     print("The Sprite fumbles around with it's quill, reaching for more arrows.\n")
                 self.turn_count = 1
@@ -334,9 +334,9 @@ class Sprite(Monster):
         Description when the Sprite uses an attack.
         """
         if self.storing_attack == True:
-            print(textwrap("In the blink of an eye the Sprite's longbow is drawn and fired - the arrow rips through the air faster than you can comprehend.", 80))
+            print(textwrap.fill("In the blink of an eye the Sprite's longbow is drawn and fired - the arrow rips through the air faster than you can comprehend.", 80))
         elif self.evasive == True:
-            print(textwrap("Out of nowhere an arrow pierces your flesh."))
+            print(textwrap.fill("Out of nowhere an arrow pierces your flesh.", 80))
         else:
             print("The Sprite draws its longbow and fires.")
 
@@ -352,7 +352,35 @@ class Troll(Monster):
     def action_determiner(self):
         match self.turn_count:
             case 1:
-                print("Troll")
+                self.attack_command(player)
+                self.turn_count += 1    
+            case 2:
+                if self.nature == "angry":
+                    print("The Troll beats its chest with its club. It looks angrier.")
+                    print("The Troll's attack increased.\n")
+                    self.attack += 1
+                    print(self.attack)
+                    self.current_hp -+ 1
+                    print(self.max_hp)
+                    self.turn_count = 1
+                    
+                elif self.nature == "gangly":
+                    if self.storing_attack == False and self.recharging == False:
+                        random_number = random.randrange(1,5)
+                        if random_number == 1:
+                            self.storing_attack = True
+                            print("The Troll winds up for a huge swing.\n")
+                        else:
+                            self.attack_command(player)
+                    elif self.storing_attack == True:
+                         self.attack_command(player)
+                         self.storing_attack = False
+                         self.recharging = True
+                    else:
+                        print("The Troll takes a moment to regain his footing after the swing.\n")
+                        self.recharging = False
+
+
 
     def introduction(self, flee):
         """
@@ -471,7 +499,6 @@ def field_screen(flee, leave_shop):
             player.max_hp = 999
             player.current_hp = 999
             player.potions = 999
-            player.attack = 100
             player.defense = 100
             print("Cheats\n")
         else:
