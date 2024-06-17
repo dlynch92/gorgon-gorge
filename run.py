@@ -39,9 +39,10 @@ class Player:
             print("And succeed!\n")
             sleep(0.5)
             flee = True
-            field_screen(flee)
+            print("You retreat to safety.\n")
+            field_screen(flee, leave_shop)
         else:
-            print("And fail!")
+            print("And fail!\n")
             sleep(0.5)
             #monster attacks
 
@@ -68,7 +69,8 @@ class Player:
         if monster.current_hp <= 0:
             monster.death(player)
             flee = False
-            field_screen(flee)
+            leave_shop = False
+            field_screen(flee, leave_shop)
 
     def potion(self):
         """
@@ -154,13 +156,18 @@ class Goblin(Monster):
             case 4:
                 Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False, 1)  
     
-    def introduction(self):
+    def introduction(self, flee):
         """
         Description of the monster when it appears.
         """
-        print(textwrap.fill("You turn the corner - a wall of foul stench permeates the air. Standing there, poised for battle, is a raggedy humanoid creature. Its sharp teeth are bared and it carries a blunt mace in one hand and a small shield in the other. You know what this is, every adventurer in the world knows what this is - A goblin. A persistant blight in the world outside of the safety of the city walls.", 80))
-        print("")
-        print(f"It looks {self.nature}.\n")
+        print(flee)
+        if not flee:
+            print(textwrap.fill("You turn the corner - a wall of foul stench permeates the air. Standing there, poised for battle, is a raggedy humanoid creature. Its sharp teeth are bared and it carries a blunt mace in one hand and a small shield in the other. You know what this is, every adventurer in the world knows what this is - A goblin. A persistant blight in the world outside of the safety of the city walls.", 80))
+            print("")
+            print(f"It looks {self.nature}.\n")
+        else:
+            print("You take a different route - Eventually, however, you encounter another Goblin.\n")
+            print(f"It looks {self.nature}\n")
 
     def action_determiner(self):
         """
@@ -207,18 +214,22 @@ class Siren(Monster):
             case 2:
                 Monster.__init__(self,"Siren", 7, 20, 20, 5, 3, "aloof", False, False, 1)
 
-    def introduction(self):
+    def introduction(self, flee):
         """
         Description of the monster when it appears.
         """
-        print(textwrap.fill("Quiet at first, but getting louder by the second, you hear the humming of a melanchonic song. It comes into focus, quickly drowning out the ambience of the grove. It's beautiful and sad - and hideous. Evil, even.", 80))
-        print("")
-        print(textwrap.fill("You descend a steep rock and find the source of the noise hiding in a large alcove. A feminine humanoid form stands there humming her song, barely bothered by your presence. She would be beautiful, lest for the layer of corpses that adorn the floor of her abode.", 80))
-        print("")
-        print(textwrap.fill("These poor souls were adventurers too, you imagine. But they were not as prepared as you - you know what this monster is. A siren.", 80))
-        print("")
-        print(f"It looks {self.nature}.\n")
-
+        if not flee:
+            print(textwrap.fill("Quiet at first, but getting louder by the second, you hear the humming of a melanchonic song. It comes into focus, quickly drowning out the ambience of the grove. It's beautiful and sad - and hideous. Evil, even.", 80))
+            print("")
+            print(textwrap.fill("You descend a steep rock and find the source of the noise hiding in a large alcove. A feminine humanoid form stands there humming her song, barely bothered by your presence. She would be beautiful, lest for the layer of corpses that adorn the floor of her abode.", 80))
+            print("")
+            print(textwrap.fill("These poor souls were adventurers too, you imagine. But they were not as prepared as you - you know what this monster is. A siren.", 80))
+            print("")
+            print(f"It looks {self.nature}.\n")
+        else: 
+            print(textwrap.fill("You take a different route - eventually however, a Siren's song begins anew. You feel compelled to follow it to the source. Another alcove, another pile of corpses. Another Siren.", 80))
+            print("")
+            print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
         match self.turn_count:
@@ -373,21 +384,21 @@ def player_name_validation(player_name):
     else:
         return True
 
-def field_screen(flee):
+def field_screen(flee, leave_shop):
     """
     The field screen where players can advance to the next battle, go to the shop or check their status. Only calls narrative field
     description at start of game or after winning a battle - skips if they flee.   
     """
-    if not flee:
+    if not flee and not leave_shop:
        field_description()
 
     while True:
         field_input = input("Commands: battle | shop | status | potion \n\n")
         if field_input.lower() == "battle":
             print("You raise your sword.\n")
-            battle_screen()
+            battle_screen(flee)
         elif field_input.lower() == "shop":
-            shop_screen()
+            shop_screen(flee)
         elif field_input.lower() == "status":
             player.status()
         elif field_input.lower() == "potion":
@@ -413,7 +424,7 @@ def field_description():
             print("")
             print("Until it hits you again. That forboding. Worse than the last.\n")
 
-def shop_screen():
+def shop_screen(flee):
     """
     Displays items and stats the player can buy in between battles. Displays an array of items and upradable stats and takes user
     input, if it matches then moves onto shop_quantity_input to take the quantity required to finalise the purchase. 
@@ -437,9 +448,9 @@ def shop_screen():
             print('"You still want to buy something?"')
         elif shop_input.lower() == "exit":
             print('"See you around."')
-            flee = True
+            leave_shop = True
             print("The voice dissipates - You return your attention to your surroundings. \n")
-            field_screen(flee)
+            field_screen(flee, leave_shop)
         else:
             print('"We do not stock that item, ask again."')
 
@@ -503,61 +514,53 @@ def shop_quantity_input_validation(quantity):
     else:
         return True
 
-def battle_screen():
+def battle_screen(flee):
     """
     Takes players commands during a battle and executes the relevant player object function
     """
     monster = initialise_battle()
-    monster.introduction()
+    monster.introduction(flee)
        
     while True:
-        if monster.current_hp > 0:
-            print(f"Current HP: {player.current_hp}/{player.max_hp}")
-            battle_input = input("Commands: attack | defend | potion | status | flee\n\n")
-            if battle_input.lower() == "attack":
-                player.attack_command(monster)
+        print(f"Current HP: {player.current_hp}/{player.max_hp}")
+        battle_input = input("Commands: attack | defend | potion | status | flee\n\n")
+        if battle_input.lower() == "attack":
+            player.attack_command(monster)
+            monster.action_determiner()
+        elif battle_input.lower() == "defend":
+            original_defense = player.defense
+            player.defend(monster)
+            monster.action_determiner()
+            player.defense = original_defense
+        elif battle_input.lower() == "potion":
+            if player.potions > 0:
+                player.potion()
                 monster.action_determiner()
-            elif battle_input.lower() == "defend":
-                original_defense = player.defense
-                player.defend(monster)
-                monster.action_determiner()
-                player.defense = original_defense
-            elif battle_input.lower() == "potion":
-                if player.potions > 0:
-                    player.potion()
-                    monster.action_determiner()
-                else:
-                    print("You reach for a potion, but have none.")
-                    print(f"The {monster.name} awaits your input.\n")
-            elif battle_input.lower() == "status":
-                player.status()
-                print(f"The {monster.name} awaits your input.\n")
-            elif battle_input.lower() == "flee":
-                player.flee(monster)
             else:
-                print("Input not recognised.\n")
-        elif monster.current_hp <= 0:
-            monster.death(player)
-            flee = False
-            field_screen(flee)
+                print("You reach for a potion, but have none.")
+                print(f"The {monster.name} awaits your input.\n")
+        elif battle_input.lower() == "status":
+            player.status()
+            print(f"The {monster.name} awaits your input.\n")
+        elif battle_input.lower() == "flee":
+            player.flee(monster)
+        else:
+            print("Input not recognised.\n")
 
 def initialise_battle():
     """
     Generates an enemy for the player to fight with difficulty based off the number of previous fights won.
     """
-    random_number = random.randrange(1,4)
     match player.battles_won:
         case 0:
             monster = Goblin()
             return monster  
         case 1:
-            if random_number == 1:
-                monster = Siren()
-            if random_number == 2:
-                monster = Siren()
-            if random_number == 3:
-                monster = Sprite(False)
-            return monster            
+            monster = Siren()
+            return monster
+        case 2: 
+            monster = Sprite()
+            return monster           
 
 def calculate_damage_to_monster(player, monster, critical):
     """
@@ -627,10 +630,13 @@ def main():
     Run all program functions.
     """
     global player
+    global flee
+    global leave_shop
     player = Player("", 5, 10, 10, 5, 3, 19, 1, 0)
     title_screen()
     player_name_input()
     flee = False
-    field_screen(flee)
+    leave_shop = False
+    field_screen(flee, leave_shop)
 
 main()
