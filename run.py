@@ -271,9 +271,9 @@ class Sprite(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 16, 10, 10, 4, 2, "clumsy", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 18, 20, 20, 6, 4, "clumsy", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Sprite", 18, 15, 15, 5, 3, "hyperactive", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 18, 20, 20, 6, 4, "hyperactive", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -347,9 +347,9 @@ class Troll(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Troll", 5, 10, 10, 4, 2, "gangly", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 35, 35, 6, 3, "gangly", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Troll", 5, 15, 15, 5, 3, "angry", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 28, 28, 4, 5, "angry", False, False, 1, False)
 
     def action_determiner(self):
         match self.turn_count:
