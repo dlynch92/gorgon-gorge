@@ -108,7 +108,7 @@ class Player:
         self.defense = math.ceil(self.defense * 2.5)
 
 class Monster:
-    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack, recharging, turn_count):
+    def __init__ (self, name, gold, max_hp, current_hp, attack, defense, nature, storing_attack, recharging, turn_count, evasive):
         self.name = name
         self.gold = gold
         self.max_hp = max_hp
@@ -119,6 +119,7 @@ class Monster:
         self.storing_attack = storing_attack
         self.recharging = recharging
         self.turn_count = turn_count
+        self.evasive = evasive
 
     def death(self, player):
         """
@@ -158,13 +159,13 @@ class Goblin(Monster):
         random_number = random.randrange(1,5)
         match random_number:
             case 1:
-                Monster.__init__(self,"Goblin", 5, 10, 10, 4, 2, "malnurished", False, False, 1)
+                Monster.__init__(self,"Goblin", 5, 10, 10, 4, 2, "malnurished", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Goblin", 8, 15, 15, 5, 3, "large", False, False, 1)
+                Monster.__init__(self,"Goblin", 8, 15, 15, 5, 3, "large", False, False, 1, False)
             case 3:
-                Monster.__init__(self,"Goblin", 8, 10, 10, 7, 2, "ferocious", False, False, 1)
+                Monster.__init__(self,"Goblin", 8, 10, 10, 7, 2, "ferocious", False, False, 1, False)
             case 4:
-                Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False, 1)  
+                Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False, 1, False)  
     
     def introduction(self, flee):
         """
@@ -219,9 +220,9 @@ class Siren(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Siren", 7, 20, 20, 4, 4, "wistful", False, False, 1)
+                Monster.__init__(self,"Siren", 14, 20, 20, 4, 4, "wistful", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Siren", 7, 20, 20, 5, 3, "aloof", False, False, 1)
+                Monster.__init__(self,"Siren", 14, 20, 20, 5, 3, "aloof", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -267,16 +268,15 @@ class Siren(Monster):
         print("The Siren erratically flails at you with her claws.")
 
 class Sprite(Monster):
-    def __init__(self, evasive):
-        self.evasive = evasive
+    def __init__(self):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "clumsy", False, False, 1)
+                Monster.__init__(self,"Sprite", 5, 10, 10, 4, 2, "clumsy", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "hyperactive", False, False, 1)
+                Monster.__init__(self,"Sprite", 5, 15, 15, 5, 3, "hyperactive", False, False, 1, False)
 
-    def introduction(self):
+    def introduction(self, flee):
         """
         Description of the monster when it appears.
         """
