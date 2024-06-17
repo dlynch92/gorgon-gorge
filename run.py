@@ -271,9 +271,9 @@ class Sprite(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 18, 20, 20, 6, 4, "clumsy", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 20, 20, 20, 6, 4, "clumsy", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Sprite", 18, 20, 20, 6, 4, "hyperactive", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 20, 20, 20, 6, 4, "hyperactive", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -351,6 +351,17 @@ class Troll(Monster):
             case 2:
                 Monster.__init__(self,"Troll", 25, 28, 28, 4, 5, "angry", False, False, 1, False)
 
+    def introduction(self, flee):
+        """
+        Description of the monster when it appears.
+        """
+        if not flee:
+            print(textwrap.fill("It's a Troll.", 80))
+            
+        else:
+            print("Its another Troll.")
+        print(f"It looks {self.nature}.\n")
+
     def action_determiner(self):
         match self.turn_count:
             case 1:
@@ -382,19 +393,6 @@ class Troll(Monster):
                         print("The Troll takes a moment to regain his footing after the swing.\n")
                         self.recharging = False
 
-
-
-    def introduction(self, flee):
-        """
-        Description of the monster when it appears.
-        """
-        if not flee:
-            print(textwrap.fill("It's a Troll.", 80))
-            
-        else:
-            print("Its another Troll.")
-        print(f"It looks {self.nature}.\n")
-
     def attack_description(self):
         """
         Description when the Troll uses an attack.
@@ -403,6 +401,35 @@ class Troll(Monster):
             print("The Troll lets out a blood-curdling roar and swipes fiercly with its club.")
         else:
             print("The Troll swings its club.")
+
+class Gorgon(Monster):
+    def __init__(self):
+        Monster.__init__(self,"Gorgon", 25, 35, 35, 6, 3, "legendary", False, False, 1, False)
+
+    def introduction(self, flee):
+        """
+        Description of the monster when it appears.
+        """
+        if not flee:
+            print(textwrap.fill("It's a Gorgon.", 80))
+        else:
+            print(textwrap.fill("The Gorgon remains where you left it - any signs of damage have vanished from its complexion.", 80))
+        print(f"It looks {self.nature}.\n")
+
+    def action_determiner(self):
+        match self.turn_count:
+            case 1:
+                self.attack_command(player)
+                self.turn_count += 1    
+
+    def attack_description(self):
+        """
+        Description when the Gorgon uses an attack.
+        """
+        if self.storing_attack == True:
+            print(textwrap.fill("The Gorgon's hair dances in unison before sharply turning to face you - they spit globs of green, viscous venom.", 80))
+        else:
+            print("The Gorgon's scimitar carves through your flesh.")
 
 shop = {
     "Potion": 3,
@@ -526,6 +553,8 @@ def field_description():
         case 2: 
             print(textwrap.fill("Next one", 80))
         case 3:
+            print(textwrap.fill("Next one", 80))
+        case 4:
             print(textwrap.fill("Next one", 80))
         
 
@@ -668,7 +697,10 @@ def initialise_battle():
             return monster  
         case 3: 
             monster = Troll()
-            return monster                    
+            return monster       
+        case 4:
+            monster = Gorgon()
+            return monster             
 
 def calculate_damage_to_monster(player, monster, critical):
     """
