@@ -56,7 +56,7 @@ class Player:
         random_number = random.randrange(1,21)
         sleep(1)
         if monster.evasive == True and random_number <= 13:
-            print(f"And miss. The {monster.name} is moving too quickly to comprehend.")
+            print(f"And miss. The {monster.name} is moving too quickly to comprehend.\n")
         elif monster.evasive == True and random_number > 13 and random_number < player.critical_threshold:
             print(f"Despite the {monster.name}'s speed, your attack hits.")
             critical = False
@@ -309,14 +309,16 @@ class Sprite(Monster):
                 self.turn_count += 1
             case 4:
                 if self.recharging == True:
-                    print("The Sprite fumbles around with it's quill, reaching for more arrows.\n")
+                    print("The Sprite fumbles around with its quill, hastily reaching for more arrows.\n")
+                    self.recharging = False
                 else:
                     self.attack_command(player)
                 self.turn_count += 1
             case 5:
                 if self.evasive == True:
                     print("The Sprite's intense movements grind to a halt. It looks exhausted.\n")   
-                    self.recharging == True
+                    self.recharging = True
+                    self.evasive = False
                 else:
                     self.attack_command(player)
                 self.turn_count += 1
@@ -356,12 +358,12 @@ class Troll(Monster):
                 self.turn_count += 1    
             case 2:
                 if self.nature == "angry":
-                    print("The Troll beats its chest with its club. It looks angrier.")
-                    print("The Troll's attack increased.\n")
+                    print("The Troll beats its chest wildly with its club, enraging it further.")
+                    print("The Troll's attack increases at the expense of its health.\n")
                     self.attack += 1
-                    print(self.attack)
-                    self.current_hp -+ 1
-                    print(self.max_hp)
+                    self.current_hp -= 3
+                    if self.current_hp < 1:
+                        self.current_hp = 1
                     self.turn_count = 1
                     
                 elif self.nature == "gangly":
