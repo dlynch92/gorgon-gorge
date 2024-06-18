@@ -83,7 +83,10 @@ class Player:
             monster.death(player)
             flee = False
             leave_shop = False
-            field_screen(flee, leave_shop)
+            if monster.name == Gorgon:
+                game_win()
+            else:
+                field_screen(flee, leave_shop)
 
     def potion(self):
         """
@@ -843,13 +846,29 @@ def calculate_damage_to_player(player, monster):
 
 def game_over():
     """
-    Called when the player's HP reaches 0 - they have lost. Takes yes/no command to see if they want to play again from
-    the start. Yes will restart game, no will quit game.
+    Called when the player's HP reaches 0 - they have lost. Runs play again function to see if the player wants to restar and play again.
     """
     print(f"Current HP: {player.current_hp}/{player.max_hp}")
     print("Your journey is over - Gorgon Gorge claims the life of another.")
-    print("Perhaps the fates will be kinder to the next one.")
-    print("Try again?")
+    print("Perhaps the fates will be kinder to the next one.\n")
+    play_again()
+
+def game_win():
+    """
+    When the player beats the Gorgon - displays the final character statistics and a congratulatory message before asking if they want to play again.
+    """
+    print("The body of the Gorgon lies motionless on the floor.")
+    print(textwrap.fill("Centuries of myth and legend, struck down single-handedly by you. Her riches are all yours.", 80))
+    print(f"The tale of {player.name} will be passed down in legend.")
+    print(f"The tale of {player.name}, The Gorgon Slayer.\n")
+    player.status()
+    play_again()
+
+def play_again():
+    """
+    Takes yes/no command to see if they want to play again from the start. Yes will restart game, no will quit game.
+    """
+    print("Play again?")
     while True:
         yes_no = input("Commands: yes | no \n\n")
         if yes_no.lower() == "yes":
@@ -859,7 +878,7 @@ def game_over():
             sys.exit()
         else:
             print("Input not recognised.\n")
-
+    
 def main():
     """
     Run all program functions.
