@@ -83,7 +83,7 @@ class Player:
             monster.death(player)
             flee = False
             leave_shop = False
-            if monster.name == Gorgon:
+            if monster.name == "Gorgon":
                 game_win()
             else:
                 field_screen(flee, leave_shop)
@@ -112,7 +112,7 @@ class Player:
         to that after the monster takes a turn.
         """
         self.defending = True
-        if monster.name == Gorgon:
+        if monster.name == "Gorgon":
             print(f"You raise your shield and hide behind it, blocking the Gorgon from view.\n")
         else:
             print(f"You raise your shield, prepared for the {monster.name}'s next strike.\n")
@@ -485,8 +485,8 @@ class Gorgon(Monster):
             print("Two grey snakes covering the Gorgon's eyes rise and dance with the rest.")
             print(textwrap.fill("The Gorgon's scimitar carves through your flesh, the poison stings fiercely.", 80))
             print("")
-
             self.gaze_countdown -= 2
+            
         else:
             print("One grey snake covering the Gorgon's eyes rises and dances with the rest.")
             print("The Gorgon's scimitar carves through your flesh.\n")
@@ -660,9 +660,9 @@ def field_description():
             print("")
             print(textwrap.fill("The Gorgon's victims are depicted here too. So many of them - all turned to stone as a result of the Gorgon's fearsome, legendary gaze. While the hair looks to drape over the monster's eyes it seems they will dance and move of their own accord.", 80))
             print("")
-            print(textwrap.fill("It would be wise to raise your shield and hide, you think, if the hair showed signs of moving, lest you end up nothing more than another cautionary tale carved into these ancient walls.", 80))
+            print(textwrap.fill("It would be wise to raise your shield and hide, you think, if the hair showed signs of moving, lest you end up nothing more than another cautionary tale.", 80))
             print("")
-            print(textwrap.fill("You turn a corner. The cavern widens into a vast chamber littered with the crumbling bodies of those who came before you, their panicked and pained expressions of terror frozen in stone. At the center of the room lays a stone altar drapes in an eerie ethereal glow.", 80))
+            print(textwrap.fill("You turn a corner. The cavern widens into a vast chamber littered with the crumbling bodies of those who came before you, their panicked and pained expressions of terror frozen in stone. At the center of the room lays a stone altar draped in an eerie ethereal glow.", 80))
             print("")
             print("You stand on the precipice of the Gorgon's lair.\n")
 
@@ -795,7 +795,7 @@ def initialise_battle():
     """
     match player.battles_won:
         case 0:
-            monster = Gorgon()
+            monster = Goblin()
             return monster  
         case 1:
             monster = Siren()
