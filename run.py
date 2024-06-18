@@ -867,10 +867,13 @@ def game_win():
     """
     When the player beats the Gorgon - displays the final character statistics and a congratulatory message before asking if they want to play again.
     """
-    print("The body of the Gorgon lies motionless on the floor.")
+    print("The body of the Gorgon lies motionless on the floor.\n")
     print(textwrap.fill("Centuries of myth and legend, struck down single-handedly by you. Her riches are all yours.", 80))
-    print(f"The tale of {player.name} will be passed down in legend.")
-    print(f"The tale of {player.name}, The Gorgon Slayer.\n")
+    print("")
+    sleep(3)
+    print(f"The tale of {player.name} will be passed down in legend.\n")
+    sleep(3)
+    player.name = player.name + ", The Gorgon Slayer"
     player.status()
     play_again()
 
