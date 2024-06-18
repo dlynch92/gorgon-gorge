@@ -271,9 +271,9 @@ class Sprite(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 20, 20, 20, 6, 4, "clumsy", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 20, 24, 24, 6, 4, "clumsy", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Sprite", 20, 20, 20, 6, 4, "hyperactive", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 20, 24, 24, 6, 4, "hyperactive", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -347,9 +347,9 @@ class Troll(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Troll", 25, 35, 35, 6, 3, "gangly", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 55, 55, 7, 3, "gangly", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Troll", 25, 28, 28, 4, 5, "angry", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 50, 50, 5, 5, "angry", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -404,7 +404,7 @@ class Troll(Monster):
 
 class Gorgon(Monster):
     def __init__(self):
-        Monster.__init__(self,"Gorgon", 25, 35, 35, 6, 3, "legendary", False, False, 1, False)
+        Monster.__init__(self,"Gorgon", 100000, 70, 70, 9, 6, "legendary", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -551,12 +551,31 @@ def field_description():
             print("")
             print("Until it hits you again. That forboding. Worse than the last.\n")
         case 2: 
-            print(textwrap.fill("Next one", 80))
+            print(textwrap.fill("You continue your descent and are lead to the edge of a vast, serene lake. The water is a mirror, reflecting the towering cliffs and twisted trees that encircle it - their images rippling with every gentle breeze.", 80))
+            print("")
+            print(textwrap.fill("Moored on the shore is a small wooden rowboat, it groans and creaks under your weight as you step onto it and begin to row.", 80))
+            print("")
+            print(textwrap.fill("You cross the lake with no resistance and dismount your boat. Standing on the shore it hits you - the silence. With the sounds of your oar hitting the water gone there is naught to distract from the ominous silence of this impossibly large cavern. Nothing is alive here. There is no wind. Everything is still.", 80))
+            print("")
+            print("You venture further.\n")
         case 3:
-            print(textwrap.fill("Next one", 80))
+            print(textwrap.fill("Further in you reach a forest nestled deep in within the Gorge. A dense canopy of twisted trees rise from the ground and envelop the space above you, they are impossibly large for how far down you must be now. Your steps are muffled by a carpet of fallen leaves and the snapping of twigs.", 80))
+            print("")
+            print(textwrap.fill("Yet these sounds are the only ones you hear. Again it hits you - the unnatural silence. It is oppressive.", 80))
+            print("")
+            print(textwrap.fill("The deeper in you go, however, the more signs of life you see. Old rusted weapons. Bones. Blood.", 80))
+            print("")
+            print("Something lurks nearby.")
         case 4:
-            print(textwrap.fill("Next one", 80))
-        
+            print(textwrap.fill("You escape the forest and navigate a series of labyrinthian passages for what feels like an eternity. The walls here are covered in intricate carvings depicting The Gorgon, a gigantic figure with long flowing braids of hair that are sentient in and of themselves. They look snake-like in form.", 80))
+            print("")
+            print(textwrap.fill("The Gorgon's victims are depicted here too. So many of them - all turned to stone as a result of the Gorgon's fearsome, legendary gaze. While the hair looks to drape over the monster's eyes it seems they will dance and move of their own accord.", 80))
+            print("")
+            print(textwrap.fill("It would be wise to raise your shield and hide, you think, if the hair showed signs of moving, lest you end up nothing more than another cautionary tale carved into these ancient walls.", 80))
+            print("")
+            print(textwrap.fill("You turn a corner. The cavern widens into a vast chamber littered with the crumbling bodies of those who came before you, their panicked and pained expressions of terror frozen in stone. At the center of the room lays a stone altar drapes in an eerie ethereal glow.", 80))
+            print("")
+            print("You stand on the precipice of the Gorgon's lair.\n")
 
 def shop_screen(flee):
     """
