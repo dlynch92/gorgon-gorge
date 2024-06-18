@@ -454,19 +454,24 @@ class Gorgon(Monster):
                     self.attack_command(player)
                     self.turn_count += 1
                 case 2:
-                    print(textwrap.fill("Globs of green, viscous liquid spit forth from a green snake's mouth onto the Gorgon's scimitar.", 80))
-                    self.storing_attack = True
+                    self.attack_command(player)
                     self.turn_count += 1
                 case 3:
+                    print(textwrap.fill("Globs of green, viscous liquid spit forth from a green snake's mouth onto the Gorgon's scimitar.", 80))
+                    print("")
+                    self.storing_attack = True
+                    self.turn_count += 1
+                case 4:
                     self.attack_command(player)
                     self.storing_attack = False
                     self.turn_count += 1
-                case 4:
+                case 5:
                     random_number = random.randrange(1,11)
                     if self.storing_attack == False and self.gaze_countdown >= 2 and random_number >= 7:
                         print(textwrap.fill("Globs of green, viscous liquid spit forth from a green snake's mouth onto the Gorgon's scimitar.", 80))
+                        print("")
                         self.storing_attack = True
-                    elif self.storing_Attack == True:
+                    elif self.storing_attack == True:
                         self.attack_command(player)
                         self.storing_attack = False
                     else:
@@ -477,34 +482,38 @@ class Gorgon(Monster):
         Description when the Gorgon uses an attack.
         """
         if self.storing_attack == True:
+            print("Two grey snakes covering the Gorgon's eyes rise and dance with the rest.")
             print(textwrap.fill("The Gorgon's scimitar carves through your flesh, the poison stings fiercely.", 80))
             print("")
-            print("Two grey snakes covering the Gorgon's eyes rise and dance with the rest.")
+
             self.gaze_countdown -= 2
         else:
+            print("One grey snake covering the Gorgon's eyes rises and dances with the rest.")
             print("The Gorgon's scimitar carves through your flesh.\n")
             self.gaze_countdown -= 1
-            print("One grey snake covering the Gorgon's eyes rises and dances with the rest.")
+            
     
     def stone_gaze(self):
         """
         When Gorgon's gaze_countdown reaches 0 this will be the next action.
         """
-        print("No grey snakes remain covering the Gorgon's eyes.")
-        sleep(0.5)
+        print("No grey snakes remain covering the Gorgon's eyes.\n")
+        sleep(3)
         if player.defending == True:
-            print("You remain behind your shield - the air around you grows heavy like stone.")
-            sleep(0.5)
+            print("You remain behind your shield - the air around you grows heavy like stone.\n")
+            sleep(3)
             print("The sensation passes.")
             print("You peer over your shield - Six grey snakes sit motionless covering her eyes.\n")
+            self.gaze_countdown = 6
         if player.defending == False:
-            print("The Gorgon's gaze entraps you.")
-            sleep(0.5)
+            print("The Gorgon's gaze entraps you.\n")
+            sleep(3)
             print(textwrap.fill("Her eyes are large and beautiful and you can't look away. You don't want to look away. Her gaze is magnetic and piercing. You feel it from your head first but it spreads quickly to the rest of your body: a stiffness. And then...", 80))
             sleep(3)
-            print("Nothing.")
+            print("")
+            print("Nothing.\n")
             sleep(3)
-            print("For eternity.")
+            print("For eternity.\n")
             sleep(3)
             print(textwrap.fill("You have fallen prey to the Gorgon's gaze. Perhaps your petrified body will serve as ample warning to the next.",80))
             player.current_hp = 0
@@ -607,6 +616,7 @@ def field_screen(flee, leave_shop):
             player.max_hp = 999
             player.current_hp = 999
             player.potions = 999
+            player.attack = 10
             player.defense = 100
             print("Dev mode activated\n")
         else:
@@ -850,7 +860,7 @@ def game_over():
     """
     print(f"Current HP: {player.current_hp}/{player.max_hp}")
     print("Your journey is over - Gorgon Gorge claims the life of another.")
-    print("Perhaps the fates will be kinder to the next one.\n")
+    print("Surely the fates will be kinder to the next.\n")
     play_again()
 
 def game_win():
