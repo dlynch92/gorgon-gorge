@@ -17,6 +17,7 @@ class Player:
         self.critical_threshold = critical_threshold
         self.potions = potions
         self.battles_won = battles_won
+        self.defending = False
     
     def status(self):
         """
@@ -32,6 +33,7 @@ class Player:
         fails in fleeing the monster will have a free turn - if they succeed the player is taken back to the field screen
         and flee is set to True so that the narrative text will not display again.
         """
+        self.defending = False
         print(f"You turn and attempt to flee from the {monster.nature} {monster.name}.")
         sleep(1)
         random_number = random.randrange(1,5)
@@ -52,6 +54,7 @@ class Player:
         attack, and any value higher than the player's critical threshold will cause a strike with extra damage. Anything else the 
         attack will hit normally. Damage is calculated in the calculate_damage_to_monster function.
         """
+        self.defending = False
         print(f"You swing your sword at the {monster.name}.")
         random_number = random.randrange(1,21)
         sleep(1)
@@ -87,6 +90,7 @@ class Player:
         Uses a potion to restore 50% of a players max HP to their current HP, ensure player current HP is no higher than their max hp,
         and reduce the player's potion count by 1
         """
+        self.defending = False
         if player.potions > 0:
             print("You reach into your bag and pick out a potion.")
             print(f"You drink it - feeling refreshed and restoring {math.ceil(self.max_hp / 2)} HP.")
@@ -104,7 +108,11 @@ class Player:
         rounded up but the original value is stored in the original_defense variable within the battle scene, and player defense is set back 
         to that after the monster takes a turn.
         """
-        print(f"You raise your shield, prepared for the {monster.name}'s next strike.\n")
+        self.defending = True
+        if monster.name == Gorgon:
+            print(f"You raise your shield and hide behind it, blocking the Gorgon from view.\n")
+        else:
+            print(f"You raise your shield, prepared for the {monster.name}'s next strike.\n")
         self.defense = math.ceil(self.defense * 2.5)
 
 class Monster:
@@ -271,9 +279,9 @@ class Sprite(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Sprite", 20, 24, 24, 6, 4, "clumsy", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 19, 24, 24, 6, 4, "clumsy", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Sprite", 20, 24, 24, 6, 4, "hyperactive", False, False, 1, False)
+                Monster.__init__(self,"Sprite", 19, 24, 24, 6, 4, "hyperactive", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -352,7 +360,7 @@ class Troll(Monster):
             case 1:
                 Monster.__init__(self,"Troll", 25, 55, 55, 7, 3, "gangly", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Troll", 25, 50, 50, 5, 5, "angry", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 55, 55, 5, 5, "angry", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -411,6 +419,7 @@ class Troll(Monster):
 class Gorgon(Monster):
     def __init__(self):
         Monster.__init__(self,"Gorgon", 100000, 70, 70, 9, 6, "legendary", False, False, 1, False)
+        self.gaze_countdown = 6
 
     def introduction(self, flee):
         """
@@ -425,7 +434,7 @@ class Gorgon(Monster):
             print("")
             print(textwrap.fill("And then a roar from behind you.", 80))
             print("")
-            print(textwrap.fill("The Gorgon. Huge. Her lower body is serpentine and coils gracefully on the cold, stone floor. Her upper body, though bearing the semblence of a woman, is clearly not human. Her skin is a sickly green. Crowning her head is a writhing mass of venomous snakes, each one hissing and flicking its forked tongue as they weave through the air, yet always covering her eyes. The serpents' scales catch the light and create an eerie, shimmering halo around her.", 80))
+            print(textwrap.fill("The Gorgon. Huge. Her lower body is serpentine and coils gracefully on the cold, stone floor. Her upper body, though bearing the semblence of a woman, is clearly not human. Her skin is a sickly green. Crowning her head is a writhing mass of green venomous snakes, each one hissing and flicking its forked tongue as they weave through the air. Five snakes, more grey than green, sit motionless covering her eyes. The serpents' scales catch the light and create an eerie, shimmering halo that encompasses the Gorgon.", 80))
             print("")
             print("This is it. \n")
         else:
@@ -433,20 +442,71 @@ class Gorgon(Monster):
         print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
-        match self.turn_count:
-            case 1:
-                self.attack_command(player)
-                self.turn_count += 1    
+        if self.gaze_countdown == 0:
+            self.stone_gaze()
+        else:    
+            match self.turn_count:
+                case 1:
+                    print("Six grey snakes of hair sit motionless covering the Gorgon's eyes.")
+                    self.attack_command(player)
+                    self.turn_count += 1
+                case 2:
+                    print(textwrap.fill("Globs of green, viscous liquid spit forth from a green snake's mouth onto the Gorgon's scimitar.", 80))
+                    self.storing_attack = True
+                    self.turn_count += 1
+                case 3:
+                    self.attack_command(player)
+                    self.storing_attack = False
+                    self.turn_count += 1
+                case 4:
+                    random_number = random.randrange(1,11)
+                    if self.storing_attack == False and self.gaze_countdown >= 2 and random_number >= 7:
+                        print(textwrap.fill("Globs of green, viscous liquid spit forth from a green snake's mouth onto the Gorgon's scimitar.", 80))
+                        self.storing_attack = True
+                    elif self.storing_Attack == True:
+                        self.attack_command(player)
+                        self.storing_attack = False
+                    else:
+                        self.attack_command(player)
 
     def attack_description(self):
         """
         Description when the Gorgon uses an attack.
         """
         if self.storing_attack == True:
-            print(textwrap.fill("The Gorgon's hair dances in unison before sharply turning to face you - they spit globs of green, viscous venom.", 80))
+            print(textwrap.fill("The Gorgon's scimitar carves through your flesh, the poison stings fiercely.", 80))
+            print("")
+            print("Two grey snakes covering the Gorgon's eyes rise and dance with the rest.")
+            self.gaze_countdown -= 2
         else:
-            print("The Gorgon's scimitar carves through your flesh.")
-
+            print("The Gorgon's scimitar carves through your flesh.\n")
+            self.gaze_countdown -= 1
+            print("One grey snake covering the Gorgon's eyes rises and dances with the rest.")
+    
+    def stone_gaze(self):
+        """
+        When Gorgon's gaze_countdown reaches 0 this will be the next action.
+        """
+        print("No grey snakes remain covering the Gorgon's eyes.")
+        sleep(0.5)
+        if player.defending == True:
+            print("You remain behind your shield - the air around you grows heavy like stone.")
+            sleep(0.5)
+            print("The sensation passes.")
+            print("You peer over your shield - Six grey snakes sit motionless covering her eyes.\n")
+        if player.defending == False:
+            print("The Gorgon's gaze entraps you.")
+            sleep(0.5)
+            print(textwrap.fill("Her eyes are large and beautiful and you can't look away. You don't want to look away. Her gaze is magnetic and piercing. You feel it from your head first but it spreads quickly to the rest of your body: a stiffness. And then...", 80))
+            sleep(3)
+            print("Nothing.")
+            sleep(3)
+            print("For eternity.")
+            sleep(3)
+            print(textwrap.fill("You have fallen prey to the Gorgon's gaze. Perhaps your petrified body will serve as ample warning to the next.",80))
+            player.current_hp = 0
+            print("")
+            game_over()
 shop = {
     "Potion": 3,
     "HP": 2,
@@ -722,7 +782,7 @@ def initialise_battle():
     """
     match player.battles_won:
         case 0:
-            monster = Goblin()
+            monster = Gorgon()
             return monster  
         case 1:
             monster = Siren()
