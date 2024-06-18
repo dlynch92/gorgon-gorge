@@ -280,10 +280,13 @@ class Sprite(Monster):
         Description of the monster when it appears.
         """
         if not flee:
-            print(textwrap.fill("It's a sprite.", 80))
-            
+            print(textwrap.fill("A shimmer catches your eye - something flutters gracefully through the air. A tiny creature with translucent wings. Its eyes are large and sparkling initially with curiosity, then quickly with mischief.", 80))
+            print("")
+            print(textwrap.fill("This is a Sprite. It begins to encircle you and lets out a soft, menacing giggle that resonates through the glade. Then you spot it - a bow. Tiny, but for the size of the sprite, quite large. It is poised at you.", 80))
+            print("")
         else:
-            print("Its another sprite.")
+            print(textwrap.fill("You take a different route - soon enough, though, the familiar hum of wings fill the air. Then the laughter. Another Sprite is here.", 80))
+            print("")
         print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
@@ -356,10 +359,13 @@ class Troll(Monster):
         Description of the monster when it appears.
         """
         if not flee:
-            print(textwrap.fill("It's a Troll.", 80))
-            
+            print(textwrap.fill("The silence is pierced by the sound of a lumbering creature standing up. You can't see it through the thick foliage, but it is nearby.", 80))
+            print("")
+            print(textwrap.fill("But then you do - it's hard not to. A towering mass of muscle and flesh holding a club larger in size than you. It turns and meets your eye. Its a Troll, and its coming for you.", 80))
+            print("")
         else:
-            print("Its another Troll.")
+            print(textwrap.fill("You take a different route - but there is no route here that will lead you safely through. This is the Troll's home, and they smell you. Fresh meat. Another Troll stands before you.", 80))
+            print("")
         print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
@@ -411,9 +417,19 @@ class Gorgon(Monster):
         Description of the monster when it appears.
         """
         if not flee:
-            print(textwrap.fill("It's a Gorgon.", 80))
+            print(textwrap.fill("You approach the altar in the middle of the room - the light that envelops it is warm, comforting, moreso than anything else you have encountered in this place.", 80))
+            print("")
+            print(textwrap.fill("The ritual to summon the Gorgon is etched in your brain - this is what its all been for. The blood, sweat and tears that have lead you to this place are all for this. You take a deep breath and begin the incantation.", 80))
+            print("")
+            print(textwrap.fill("The single column of light expands outwards, illuminating the entire room. The scope of it is terrifying - before you could see a handful of frozen adventurers, but now you can see hundreds. Thousands maybe. Scores upon scores of them in every direction as far as the eye can see.", 80))
+            print("")
+            print(textwrap.fill("And then a roar from behind you.", 80))
+            print("")
+            print(textwrap.fill("The Gorgon. Huge. Her lower body is serpentine and coils gracefully on the cold, stone floor. Her upper body, though bearing the semblence of a woman, is clearly not human. Her skin is a sickly green. Crowning her head is a writhing mass of venomous snakes, each one hissing and flicking its forked tongue as they weave through the air, yet always covering her eyes. The serpents' scales catch the light and create an eerie, shimmering halo around her.", 80))
+            print("")
+            print("This is it. \n")
         else:
-            print(textwrap.fill("The Gorgon remains where you left it - any signs of damage have vanished from its complexion.", 80))
+            print(textwrap.fill("The Gorgon remains where you left her - any signs of damage have vanished from her complexion. She stands tall, waiting for your approach.", 80))
         print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
@@ -529,7 +545,7 @@ def field_screen(flee, leave_shop):
             player.current_hp = 999
             player.potions = 999
             player.defense = 100
-            print("Cheats\n")
+            print("Dev mode activated\n")
         else:
             print("Input not recognised.\n")
 
@@ -565,7 +581,7 @@ def field_description():
             print("")
             print(textwrap.fill("The deeper in you go, however, the more signs of life you see. Old rusted weapons. Bones. Blood.", 80))
             print("")
-            print("Something lurks nearby.")
+            print("Something lurks nearby.\n")
         case 4:
             print(textwrap.fill("You escape the forest and navigate a series of labyrinthian passages for what feels like an eternity. The walls here are covered in intricate carvings depicting The Gorgon, a gigantic figure with long flowing braids of hair that are sentient in and of themselves. They look snake-like in form.", 80))
             print("")
