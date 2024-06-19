@@ -423,6 +423,7 @@ class Gorgon(Monster):
     def __init__(self):
         Monster.__init__(self,"Gorgon", 100000, 70, 70, 9, 6, "legendary", False, False, 1, False)
         self.gaze_countdown = 6
+        self.hp_at_end_of_turn = self.current_hp
 
     def introduction(self, flee):
         """
@@ -445,12 +446,14 @@ class Gorgon(Monster):
         print(f"It looks {self.nature}.\n")
 
     def action_determiner(self):
-        if self.gaze_countdown == 0:
-            self.stone_gaze()
-        if self.hp_at_end_of_turn == self.current_hp:
-            self.current_hp += 5
+         
+        if self.hp_at_end_of_turn == self.current_hp and self.current_hp < (self.max_hp - 2):
+            self.current_hp += 2
             print("The Gorgon remains undisturbed and basks in the light.")
             print("It restores some health.\n")
+        
+        if self.gaze_countdown == 0:
+            self.stone_gaze()
         else:    
             match self.turn_count:
                 case 1:
@@ -485,7 +488,8 @@ class Gorgon(Monster):
                     else:
                         self.attack_command(player)
                         self.check_if_player_defending(player)
-                        
+            self.hp_at_end_of_turn = self.current_hp
+    
     def attack_description(self):
         """
         Description when the Gorgon uses an attack.
@@ -505,8 +509,9 @@ class Gorgon(Monster):
         """
         When the gorgon does a regular attack - checks if the player is defending. If they are, reduce the player's defense by 1.
         """
+        global original_defense
         if player.defending == True:
-            player.defense -= 1
+            original_defense -= 1
             print("The Gorgon laughs at your needless cowardice.")
             print("You feel weaker. Your Defense is reduced by 1.\n")
 
@@ -787,6 +792,7 @@ def battle_screen(flee):
             player.attack_command(monster)
             monster.action_determiner()
         elif battle_input.lower() == "defend":
+            global original_defense
             original_defense = player.defense
             player.defend(monster)
             monster.action_determiner()
