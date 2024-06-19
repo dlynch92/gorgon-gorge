@@ -421,7 +421,7 @@ class Troll(Monster):
 
 class Gorgon(Monster):
     def __init__(self):
-        Monster.__init__(self,"Gorgon", 100000, 70, 70, 9, 6, "legendary", False, False, 1, False)
+        Monster.__init__(self,"Gorgon", 100000, 70, 70, 8, 6, "legendary", False, False, 1, False)
         self.gaze_countdown = 6
         self.hp_at_end_of_turn = self.current_hp
 
