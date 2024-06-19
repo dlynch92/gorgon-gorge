@@ -363,7 +363,7 @@ class Troll(Monster):
             case 1:
                 Monster.__init__(self,"Troll", 25, 55, 55, 8, 3, "gangly", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Troll", 25, 55, 55, 7, 5, "angry", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 55, 55, 8, 5, "angry", False, False, 1, False)
 
     def introduction(self, flee):
         """
