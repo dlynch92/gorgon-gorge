@@ -361,9 +361,9 @@ class Troll(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Troll", 25, 55, 55, 8, 3, "gangly", False, False, 1, False)
+                Monster.__init__(self,"Troll", 28, 55, 55, 8, 3, "gangly", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Troll", 25, 55, 55, 8, 5, "angry", False, False, 1, False)
+                Monster.__init__(self,"Troll", 28, 55, 55, 8, 5, "angry", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -421,7 +421,7 @@ class Troll(Monster):
 
 class Gorgon(Monster):
     def __init__(self):
-        Monster.__init__(self,"Gorgon", 100000, 70, 70, 8, 6, "legendary", False, False, 1, False)
+        Monster.__init__(self,"Gorgon", 100000, 70, 70, 8, 5, "legendary", False, False, 1, False)
         self.gaze_countdown = 6
         self.hp_at_end_of_turn = self.current_hp
 
@@ -438,7 +438,7 @@ class Gorgon(Monster):
             print("")
             print(textwrap.fill("And then a roar from behind you.", 80))
             print("")
-            print(textwrap.fill("The Gorgon. Huge. Her lower body is serpentine and coils gracefully on the cold, stone floor. Her upper body, though bearing the semblence of a woman, is clearly not human. Her skin is a sickly green. Crowning her head is a writhing mass of green venomous snakes, each one hissing and flicking its forked tongue as they weave through the air. Five snakes, more grey than green, sit motionless covering her eyes. The serpents' scales catch the light and create an eerie, shimmering halo that encompasses the Gorgon.", 80))
+            print(textwrap.fill("The Gorgon. Huge. Her lower body is serpentine and coils gracefully on the cold, stone floor. Her upper body, though bearing the semblence of a woman, is clearly not human. Her skin is a sickly green. Crowning her head is a writhing mass of green venomous snakes, each one hissing and flicking its forked tongue as they weave through the air. Six snakes, more grey than green, sit motionless covering her eyes. The serpents' scales catch the light and create an eerie, shimmering halo that encompasses the Gorgon.", 80))
             print("")
             print("This is it. \n")
         else:
@@ -448,7 +448,7 @@ class Gorgon(Monster):
     def action_determiner(self):
          
         if self.hp_at_end_of_turn == self.current_hp and self.current_hp < (self.max_hp - 2):
-            self.current_hp += 2
+            self.current_hp += 1
             print("The Gorgon remains undisturbed and basks in the light.")
             print("It restores some health.\n")
         
@@ -686,7 +686,9 @@ def field_description():
             print("")
             print(textwrap.fill("You turn a corner. The cavern widens into a vast chamber littered with the crumbling bodies of those who came before you, their panicked and pained expressions of terror frozen in stone. At the center of the room lays a stone altar draped in an eerie ethereal glow.", 80))
             print("")
-            print("You stand on the precipice of the Gorgon's lair.\n")
+            print("You stand on the precipice of the Gorgon's lair. A sense of determination washes over you. \n")
+            print("You regain your lost HP")
+            player.current_hp = player.max_hp
 
 def shop_screen(flee):
     """
