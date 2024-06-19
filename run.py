@@ -361,9 +361,9 @@ class Troll(Monster):
         random_number = random.randrange(1,3)
         match random_number:
             case 1:
-                Monster.__init__(self,"Troll", 25, 55, 55, 7, 3, "gangly", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 55, 55, 8, 3, "gangly", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Troll", 25, 55, 55, 5, 5, "angry", False, False, 1, False)
+                Monster.__init__(self,"Troll", 25, 55, 55, 7, 5, "angry", False, False, 1, False)
 
     def introduction(self, flee):
         """
@@ -447,18 +447,25 @@ class Gorgon(Monster):
     def action_determiner(self):
         if self.gaze_countdown == 0:
             self.stone_gaze()
+        if self.hp_at_end_of_turn == self.current_hp:
+            self.current_hp += 5
+            print("The Gorgon remains undisturbed and basks in the light.")
+            print("It restores some health.\n")
         else:    
             match self.turn_count:
                 case 1:
                     print("Six grey snakes of hair sit motionless covering the Gorgon's eyes.")
                     self.attack_command(player)
+                    self.check_if_player_defending(player)
                     self.turn_count += 1
                 case 2:
                     self.attack_command(player)
+                    self.check_if_player_defending(player)
                     self.turn_count += 1
                 case 3:
                     print(textwrap.fill("Globs of green, viscous liquid spit forth from a green snake's mouth onto the Gorgon's scimitar.", 80))
                     print("")
+                    self.check_if_player_defending(player)
                     self.storing_attack = True
                     self.turn_count += 1
                 case 4:
@@ -470,13 +477,15 @@ class Gorgon(Monster):
                     if self.storing_attack == False and self.gaze_countdown >= 2 and random_number >= 7:
                         print(textwrap.fill("Globs of green, viscous liquid spit forth from a green snake's mouth onto the Gorgon's scimitar.", 80))
                         print("")
+                        self.check_if_player_defending(player)
                         self.storing_attack = True
                     elif self.storing_attack == True:
                         self.attack_command(player)
                         self.storing_attack = False
                     else:
                         self.attack_command(player)
-
+                        self.check_if_player_defending(player)
+                        
     def attack_description(self):
         """
         Description when the Gorgon uses an attack.
@@ -492,7 +501,15 @@ class Gorgon(Monster):
             print("The Gorgon's scimitar carves through your flesh.\n")
             self.gaze_countdown -= 1
             
-    
+    def check_if_player_defending(self, player):
+        """
+        When the gorgon does a regular attack - checks if the player is defending. If they are, reduce the player's defense by 1.
+        """
+        if player.defending == True:
+            player.defense -= 1
+            print("The Gorgon laughs at your needless cowardice.")
+            print("You feel weaker. Your Defense is reduced by 1.\n")
+
     def stone_gaze(self):
         """
         When Gorgon's gaze_countdown reaches 0 this will be the next action.
