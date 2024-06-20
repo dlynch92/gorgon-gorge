@@ -757,7 +757,7 @@ def shop_quantity_input(shop_input, shop_lower):
                                 player.attack += quantity
                                 print('"The best offense is a good offense, I always say."')
                         player.gold -= gold_needed
-                        print('"Pleasure doing business."')
+                        print('"Pleasure doing business. Anything else?" \n')
                         break
                     if yes_no.lower() == "yes" and player.gold < gold_needed:
                         print('"No credit, cash only. Come back when you have enough."')
