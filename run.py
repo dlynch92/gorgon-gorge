@@ -29,7 +29,7 @@ class Player:
 
     def flee(self, monster):
         """
-        When flee is picked in battle the player has a 50% chance of escaping back to the field screen. If the player
+        When flee is picked in battle the player has a 60% chance of escaping back to the field screen. If the player
         fails in fleeing the monster will have a free turn - if they succeed the player is taken back to the field screen
         and flee is set to True so that the narrative text will not display again.
         """
@@ -170,13 +170,13 @@ class Goblin(Monster):
         random_number = random.randrange(1,5)
         match random_number:
             case 1:
-                Monster.__init__(self,"Goblin", 5, 10, 10, 4, 2, "malnurished", False, False, 1, False)
+                Monster.__init__(self,"Goblin", 6, 10, 10, 4, 2, "malnurished", False, False, 1, False)
             case 2:
-                Monster.__init__(self,"Goblin", 8, 15, 15, 5, 3, "large", False, False, 1, False)
+                Monster.__init__(self,"Goblin", 9, 15, 15, 5, 3, "large", False, False, 1, False)
             case 3:
-                Monster.__init__(self,"Goblin", 8, 10, 10, 7, 2, "ferocious", False, False, 1, False)
+                Monster.__init__(self,"Goblin", 9, 10, 10, 6, 2, "ferocious", False, False, 1, False)
             case 4:
-                Monster.__init__(self,"Goblin", 5, 13, 13, 5, 3, "timid", False, False, 1, False)  
+                Monster.__init__(self,"Goblin", 6, 13, 13, 5, 3, "timid", False, False, 1, False)  
     
     def introduction(self, flee):
         """
@@ -686,8 +686,9 @@ def field_description():
             print("")
             print(textwrap.fill("You turn a corner. The cavern widens into a vast chamber littered with the crumbling bodies of those who came before you, their panicked and pained expressions of terror frozen in stone. At the center of the room lays a stone altar draped in an eerie ethereal glow.", 80))
             print("")
-            print("You stand on the precipice of the Gorgon's lair. A sense of determination washes over you. \n")
-            print("You regain your lost HP")
+            print("You stand on the precipice of the Gorgon's lair.\n")
+            print("A sense of determination washes over you. \n")
+            print("You regain your lost HP.\n")
             player.current_hp = player.max_hp
 
 def shop_screen(flee):
@@ -696,9 +697,10 @@ def shop_screen(flee):
     input, if it matches then moves onto shop_quantity_input to take the quantity required to finalise the purchase. 
     """
     print("A voice rings out from the aether.")
-    print('"Looking for potions? Or do you want to increase your stats?"')
+    print('"Looking for potions? Or do you want to increase your stats?"\n')
     while True:
-        print(shop)
+        display_shop = "".join(str(k) + ": " + str(v) + " Gold | " for k, v in shop.items())
+        print(display_shop)
         print(f"Current Gold: {player.gold}\n")
         shop_input = input("Commands: Type name of item/stat above | status | exit \n\n")
         shop_lower = shop
