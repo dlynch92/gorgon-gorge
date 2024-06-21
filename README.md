@@ -78,28 +78,28 @@ A few other minor things were changed from the flowchart, mostly for balance pur
 ### Field Screen
 
 * Narrative display - Narrative descriptive text shows when entering the field screen for the first time after starting or beating a monster. It won't display again if the player flees from an encounter or returns to the field screen via the shop. 
+ <br>
+ <img src="readme-images/field.png" width="500">
 * Navigation to shop & battle screen - From this screen the player can navigate to the shop to increase their stats or purchase potions, or they can advance to the next battle.
-* Statistics - Shows a display of the adventurer's name, current stats (current / max hp, attack, defense, gold and potion count). Allows for the player to make a more informed descision about what they want to do next, or what stats to focus on improving for example. This command is also available in the shop and during battle.
+* Status - Shows a display of the adventurer's name, current stats (current / max hp, attack, defense, gold and potion count). Allows for the player to make a more informed descision about what they want to do next, or what stats to focus on improving for example. This command is also available in the shop and during battle.
+ <img src="readme-images/status.png" width="500">
 * Potion - Allows the player to expend a potion in order to restore 50% of their maximum HP (rounded up). This command is also available during battle.
+ <img src="readme-images/potion.png" width="500">
 
 ### Shop Screen
 
 * Shop display - Displays what the shop has for sale and the amount of gold that each potion / stat increase requires.
+<br> <img src="readme-images/shop.png" width="500">
 * Item input - The player can type potion or the stat the want to increase before being moved onto the quantity input.
+<br> <img src="readme-images/item-input.png" width="500">
 * Quantity input - The player inputs how many of that item or stat increases they want to purchase. This can be done with either a numerical input or a string (e.g "two") which is then converted to an integer using the wordtodigits module.
+<br> <img src="readme-images/item-quantity.png" width="500">
 * Confirm input - Displays how much gold in total the desired purchase will cost and asks the player to confirm. If the player confirms but does not have the amount of gold required then the shopkeeper will say this, else they will thank the player and complete the transaction. After both cases the user will be returned to the initial shop display where they can continue making transactions or return to the field screen.
+<br> <img src="readme-images/item-confirm.png" width="500">
 * Navigation to field screen - When the player is done upgrading their character they can choose to return to the field screen.
 
 ### Battle Screen
 
-* Attack - Player types attack and attempts to hit the creature. The game generates a number between 1 and 20 every time and depending on the result does the following:
-    | Random number   | Outcome | Notes |
-    | -------- | --------------- | ------------------|
-    | 1  | Player misses | Player deals no damage to the enemy, flavour text showing the monster dodging the attack is displayed, essentially losing a turn. |
-    |2 - 18 | Player hits | Player deals damage to the enemy - formula is (player attack - monster defense) + 1 or 2 variance. |
-    |19 - 20| Player critical hits | Player deals extra damage to the enemy, flavour text shows a powerful strike has landed - Formula is (player attack x 2) - monster defense. |
-* Defend - Player types defend and spends a turn vastly increasing their defense (x2.5). 
-* Flee - 60% chance of fleeing the battle. If successful the player returns to the field screen and retains their character state - next time they go into battle a new enemy is generated so the nature of the creature can change. Narrative text also changes upon re-entering a battle to make it clear it's a different entity to the first monster that was encountered.
 * Monster generation - The monsters the player encounters are set in a specific order, but attack patterns and stats are determined by their nature which can change from battle to battle. Care was taken to try and make each monster feel unique and different compared to other ones through the use of their descriptive text and also by having them introduce new and sometimes unique mechanics to each encounter. The monsters you encounter and a brief overview of those mechanics can be seen below.
 
     <details>
@@ -115,15 +115,33 @@ A few other minor things were changed from the flowchart, mostly for balance pur
     | | | HP regeneration - When the player doesn't hurt the Gorgon on that turn, a small amount of HP will be regenerated.  |
     | | | Reduce player defense - If the player defends and the next attack isn't a gaze or a charge attack, the gorgon will punish the player by reducing their defense by 1 permanently. This is to encourage keeping proper track of the gaze mechanic so players can't just spam the defend command. |
     </details>
+    <img src="readme-images/battle.png" width="500">
 
+* Attack - Player types attack and attempts to hit the creature. The game generates a number between 1 and 20 every time and depending on the result does the following:
+
+    | Random number   | Outcome | Notes |
+    | -------- | --------------- | ------------------|
+    | 1  | Player misses | Player deals no damage to the enemy, flavour text showing the monster dodging the attack is displayed, essentially losing a turn. |
+    |2 - 18 | Player hits | Player deals damage to the enemy - formula is (player attack - monster defense) + 1 or 2 variance. |
+    |19 - 20| Player critical hits | Player deals extra damage to the enemy, flavour text shows a powerful strike has landed - Formula is (player attack x 2) - monster defense. |
+
+    <br> <img src="readme-images/attack.png" width="500">
+* Defend - Player types defend and spends a turn vastly increasing their defense (x2.5). 
+<br> <img src="readme-images/defend.png" width="500">
+* Flee - 60% chance of fleeing the battle. If successful the player returns to the field screen and retains their character state - next time they go into battle a new enemy is generated so the nature of the creature can change. Narrative text also changes upon re-entering a battle to make it clear it's a different entity to the first monster that was encountered.
+<br> <img src="readme-images/flee.png" width="500">
 * Looting monster - Once the monster is dead players are required to input if they want to loot or leave the body - looting grants them some gold, while leaving gives them nothing. There is no advantage to not looting, and this was mostly implemented to give the player options for challenge runs and also to help with pacing to stagger the text and require an input in between the end of the fight and the next descriptive text appearing.
+<br> <img src="readme-images/loot.png" width="500">
 
 ### Other
 
 * Name input - At the start of the game the user will enter the name of their character. This will display at various points, including on the status screen when the player wants an overview of their character.
+<br>
+<img src="readme-images/name_input.png" width="500">
 * Win screen - Once the Gorgon has been defeated the player wins the game. Brief narrative text congratulates them before updating their name to include ", The Gorgon Slayer" as their title, and then displays the statistics screen to show the end state of character on their winning run. After this it asks if the player wants to start again or quit the game.
+<br> <img src="readme-images/win.png" width="500">
 * Lose screen - If the player is reduced to 0 HP then the player loses the game. Brief narrative text explains that they have lost, and perhaps the next adventurer will fare better, before asking whether they want to start again or quit the game.
-
+<br> <img src="readme-images/lose.png" width="500">
 ### Future Features
 
 Several potential features that further improve the game have been indentified and could be implemented in the future.
@@ -278,4 +296,11 @@ By forking the repository, we make a copy of the original repository on our GitH
 
 ## Credits
 
+* All code written by myself
+* Title screen flavour text generated with [ChatGPT](https://chatgpt.com/)
+* [Thomas-Tomo's hangman](https://github.com/Thomas-Tomo/hangman) for the Readme template.
+
+---
+
 ## Acknowledgements
+* My mentor Mitko Bachvarov for tips and encouragement.
