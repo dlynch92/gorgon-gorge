@@ -650,9 +650,9 @@ def field_description():
     """
     match player.battles_won:
         case 0: 
-            print(textwrap.fill("The air is thick with enchantment, carrying the scent of blooming nightshade and the distant hum of mystical energies. Towering walls of ancient stone, etched with glowing runes, rise on either side - their surfaces shimmering with hues that shift like the colors of an opal.", 80))
+            print(textwrap.fill("The air here is heavy with enchantment and carries the scent of dank nightshade. To your left and right stand towering walls of ancient stone etched to the brim with glowing runes and sigils with hues that shimmer and  shift like the colours of an opal.", 80))
             print("")
-            print(textwrap.fill("As you advance deeper into the gorge the peaceful ambience gives way to something more sinister. Growling. The gnashing of teeth. A sense of forboding. Around the next bend, you know, something waits — something unknown and undoubtedly dangerous.", 80))
+            print(textwrap.fill("The ambience - peaceful at first - gives way as you progress deeper into the gorge. Growling. The gnashing of teeth. A sense of foreboding. Around the next bend, you know, something waits — something unknown and undoubtedly dangerous.", 80))
             print("")
         case 1:
             print(textwrap.fill("The tension in the air is lifted now that the threat of the goblin has passed - but you've heard the stories. Stories of adventurers greater than you that have never made it back from this twisted place. Adventurers that would not fall victim to a measly goblin, or even ten.", 80))
@@ -664,7 +664,7 @@ def field_description():
         case 2: 
             print(textwrap.fill("You continue your descent and are lead to the edge of a vast, serene lake. The water is a mirror, reflecting the towering cliffs and twisted trees that encircle it - their images rippling with every gentle breeze.", 80))
             print("")
-            print(textwrap.fill("Moored on the shore is a small wooden rowboat, it groans and creaks under your weight as you step onto it and begin to row.", 80))
+            print(textwrap.fill("Moored on the shore is a small wooden rowboat, it groans under your weight as you step onto it and begin to row.", 80))
             print("")
             print(textwrap.fill("You cross the lake with no resistance and dismount your boat. Standing on the shore it hits you - the silence. With the sounds of your oar hitting the water gone there is naught to distract from the ominous silence of this impossibly large cavern. Nothing is alive here. There is no wind. Everything is still.", 80))
             print("")
