@@ -593,7 +593,7 @@ def player_name_input():
                 if yes_no.lower() == "yes":
                     player.name = player_name
                     print(f"The adventurer {player.name} steps forth...\n")
-                    break
+                    field_screen(flee, leave_shop)
                 elif yes_no.lower() == "no":
                     player_name_input()
                 else:
@@ -951,11 +951,9 @@ def main():
     global flee
     global leave_shop
     player = Player("", 5, 10, 10, 5, 3, 19, 1, 0)
-    title_screen()
-    player_name_input()
     flee = False
     leave_shop = False
-    field_screen(flee, leave_shop)
-
+    title_screen()
+    player_name_input()
 
 main()
