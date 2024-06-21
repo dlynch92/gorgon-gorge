@@ -223,7 +223,7 @@ class Goblin(Monster):
         Description when the Goblin uses an attack.
         """
         if self.storing_attack is True:
-            print("The Goblin dashes forward and jumps, putting its entire weight behind a huge overhead swing.")
+            print("The Goblin dashes forward and jumps, putting all its weight behind a huge overhead swing.")
         else:
             print("The Goblin raises its mace and swipes at you.")
 
