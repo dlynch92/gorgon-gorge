@@ -183,6 +183,8 @@ Several potential features that further improve the game have been indentified a
  * [Draw.io](https://draw.io/)
     * To create the initial logic flowchart for the project.
 
+---
+
 ## Testing
 
 ### Linter Testing
@@ -256,7 +258,6 @@ All string inputs listed below can be accepted in any case - the program convert
 
 </details>
 
----
 
 ### Bugs Fixed
 
@@ -264,7 +265,9 @@ All string inputs listed below can be accepted in any case - the program convert
 |-------------|--------------|
 | When inputting the player name, if the player selects no when asked for confirmation and then picks a different name, the game would then ask for confirmation twice and apply the first name that the player chose despite originally saying no. | Yes  - moved field_screen() call into player_name_input() rather than main.|
 | During the Gorgon battle, erroneously defending displays that player defence has been lowered but on the status screen it shows that the player's defense remains the same. | Yes - Player defense value is captured in a variable upon using the defense command, and is then multiplied by 2.5 when defending before being reverted back to the captured value at the end of the turn. Initial reduction was updating the multiplied value but was then being reverted to the initial, unchanged captured value. Made the captured value global and updated that instead - now works as intended.
-| Various whitespace and formatting issues showing during linter testing | Yes - Removed any extra whitespace at the end of lines and spaced functions out according to best practises   
+| Various whitespace and formatting issues showing during linter testing | Yes - Removed any extra whitespace at the end of lines and spaced functions out according to best practises  
+
+---
 
 ## Deployment
 
@@ -302,6 +305,8 @@ By forking the repository, we make a copy of the original repository on our GitH
 5. Change the current working directory to the location where you want the cloned directory to be made.
 6. Type `git clone` and then paste The URL copied in the step 3.
 7. Press Enter and your local clone will be created.
+
+---
 
 ## Credits
 
