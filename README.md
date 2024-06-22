@@ -9,10 +9,14 @@ The project is essentially split into 3 "screens" - field, battle and shop, whic
 - - -
 ## Table of Contents
 
-### [User Experience (UX)](#user-experience-ux-1)
+### [User Experience](#user-experience-1)
 ### [Design](#design-1)
 * [Initial Flowchart](#initial-flowchart)
 ### [Features](#features-1)
+* [Field Screen](#field-screen)
+* [Shop Screen](#shop-screen)
+* [Battle Screen](#battle-screen)
+* [Other](#other)
 * [Future Features](#future-features)
 ### [Technologies Used](#technologies-used-1)
 ### [Frameworks, Libraries & Programs Used](#frameworks-libraries--programs-used-1)
